@@ -4,6 +4,8 @@ import uuidV4 from 'uuid/v4'
 import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 
+import Logo from '../../atoms/Logo'
+
 export default class LandingPage extends React.Component {
     constructor(props) {
         super(props)
@@ -19,7 +21,7 @@ export default class LandingPage extends React.Component {
         let { classes, sheet, router } = this.props
 
         return <Paper className={classes.landing} zDepth={2}>
-          <h1>Time Tracker</h1>
+          <Logo />
           <RaisedButton className={classes.button}
             label="Sign In"
             primary={true}

@@ -8,6 +8,8 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import CircularProgress from 'material-ui/CircularProgress'
 
+import Logo from '../../atoms/Logo'
+
 export default class SignUp extends React.Component {
     constructor(props) {
         super(props)
@@ -76,7 +78,7 @@ export default class SignUp extends React.Component {
         />
 
         return <Paper className={classes.signup} zDepth={2}>
-          <h1>Time Tracker</h1>
+          <Logo />
           <TextField
             floatingLabelText="Username"
             fullWidth={true}

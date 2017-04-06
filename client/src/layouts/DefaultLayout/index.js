@@ -4,6 +4,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import injectSheet from 'react-jss'
 
+import stylesheet from './style.css'
+
 const muiTheme = getMuiTheme({
     fontFamily: "'Montserrat', sans-serif"
 })
