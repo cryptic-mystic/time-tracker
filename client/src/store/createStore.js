@@ -3,8 +3,11 @@ import persistState from 'redux-localstorage'
 import thunk from 'redux-thunk'
 import makeRootReducer from './reducers'
 import createLogger from 'redux-logger'
+import Immutable from 'immutable'
 
-export default (initialState = {}, history = {}) => {
+import { initialState as initialUser } from './user/reducer'
+
+export default (initialState, history = {}) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================
@@ -24,7 +27,18 @@ export default (initialState = {}, history = {}) => {
   // ======================================================
   // Store Enhancers
   // ======================================================
-  const enhancers = [persistState()]
+  const enhancers = [persistState('user', {
+    serialize: (collection) => {
+      return JSON.stringify(collection.user.toJS())
+    },
+    deserialize: (serialized) => {
+      if (serialized === null) return { user: initialUser }
+      else return { user: Immutable.fromJS(JSON.parse(serialized))}
+    },
+    merge: (initialState, persistedState) => {
+      return persistedState
+    }
+  })]
 
   // ======================================================
   // Store Instantiation and HMR Setup

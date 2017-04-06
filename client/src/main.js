@@ -20,7 +20,7 @@ let render = (routerKey = null) => {
     <AppContainer
       store={store}
       history={browserHistory}
-      routes={appRoutes()}
+      routes={appRoutes(store)}
       routerKey={routerKey}
     />,
     MOUNT_NODE

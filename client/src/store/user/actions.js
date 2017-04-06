@@ -2,35 +2,49 @@ import userService from '../../api/userService'
 
 // actionTypes
 export const actionTypes = {
-    USER_UPDATED: 'USER_UPDATED',
+    AUTHENTICATED: 'AUTHENTICATED',
+    LOGOUT: 'LOGOUT'
 }
 
 // actions
-export function userUpdated(user) {
+export function authenticated(token) {
     return {
-        type: actionTypes.USER_UPDATED,
-        user
+        type: actionTypes.AUTHENTICATED,
+        token: token
     }
 }
 
 // thunks
-export function syncUser(user) {
+export function signUp(username, email, password) {
     return function (dispatch) {
-        dispatch(userUpdated(user))
-        return userService.syncUser(user)
+        return userService.signUp(username, email, password)
             .then(function (response) {
-                var data = response.data
-                console.log(data)
-                console.log('Success!!!')
+                console.log(response)
+                dispatch(authenticated(response.data.token))
             })
             .catch(function (error) {
                 console.error(error)
+                throw error
             })
     }
 }
 
+export function signIn(email, password) {
+    return function (dispatch) {
+        return userService.signIn(email, password)
+            .then(function (response) {
+                console.log(response)
+                dispatch(authenticated(response.data.token))
+            })
+            .catch(function (error) {
+                console.error(error)
+                throw error
+            })
+    }
+}
 
 export default {
     actionTypes,
-    syncUser
+    signUp,
+    signIn
 }

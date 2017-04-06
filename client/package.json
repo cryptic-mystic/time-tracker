@@ -19,14 +19,16 @@
     "build": {
       "command": "rm -rf dist && webpack",
       "env": {
-        "DEBUG": "webpack:*"
+        "DEBUG": "webpack:*",
+        "API_URL": "http://localhost:3333"
       }
     },
     "server": {
       "command": "webpack-dev-server",
       "env": {
         "DEBUG": "webpack:*",
-        "DEVELOPMENT": true
+        "DEVELOPMENT": true,
+        "API_URL": "http://localhost:3333"
       }
     }
   },
@@ -49,6 +51,7 @@
     "debug": "^2.6.1",
     "history": "^4.5.1",
     "html-webpack-plugin": "^2.28.0",
+    "immutable": "^3.8.1",
     "jss-camel-case": "^3.0.0",
     "jss-global": "^0.4.1",
     "jss-nested": "^3.0.1",
@@ -62,6 +65,7 @@
     "react-router": "^3.0.2",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
+    "redux-immutable": "^4.0.0",
     "redux-localstorage": "^0.4.1",
     "redux-logger": "^2.8.1",
     "redux-thunk": "^2.2.0",

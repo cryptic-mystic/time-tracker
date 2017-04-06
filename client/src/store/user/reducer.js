@@ -1,18 +1,29 @@
 import { actionTypes } from './actions'
+import Immutable from 'immutable'
 
-var initialState = {
-    id: null
-}
+export var initialState = Immutable.Map({
+    authenticated: false,
+    token: null,
+    profile: null
+})
 
-export default function user(state, action) {
+export function user(state, action) {
     if (typeof state === 'undefined') return initialState
 
     switch (action.type) {
-        case actionTypes.USER_UPDATED:
-            return Object.assign({}, state, action.user)
-        // case userActionTypes.LOGOUT:
-        //     return false
+        case actionTypes.AUTHENTICATED:
+            return state.merge({
+              authenticated: true,
+              token: action.token
+            })
+        case actionTypes.LOGOUT:
+            return initialState
     }
 
     return state
+}
+
+export default {
+    initialState,
+    user
 }

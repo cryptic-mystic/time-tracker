@@ -5,7 +5,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import injectSheet from 'react-jss'
 
 const muiTheme = getMuiTheme({
-  fontFamily: "'Montserrat', sans-serif"
+    fontFamily: "'Montserrat', sans-serif"
 })
 
 const styles = {

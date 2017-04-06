@@ -103,7 +103,8 @@ const configuration = {
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: process.env.DEVELOPMENT ? JSON.stringify('development') : JSON.stringify('production')
+        NODE_ENV: process.env.DEVELOPMENT ? JSON.stringify('development') : JSON.stringify('production'),
+        API_URL: JSON.stringify(process.env.API_URL)
       }
     }),
   ],
