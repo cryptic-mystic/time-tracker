@@ -3,9 +3,10 @@ import { combineReducers } from 'redux'
 import Immutable from 'immutable'
 
 import { user } from './user/reducer'
+import { snackbar } from './snackbar/reducer'
 
 export const makeRootReducer = () => {
-  return combineReducers({ user })
+  return combineReducers({ user, snackbar })
 }
 
 export default makeRootReducer

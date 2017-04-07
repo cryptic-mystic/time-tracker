@@ -1,20 +1,15 @@
 import { connect } from 'react-redux'
 import injectSheet from 'react-jss'
 
-import Track from './Track'
+import Record from './Record'
 
 const styles = {
-  track: {
-    padding: '0 0 40px 0',
-    textAlign: 'center',
-    '& h1': {
-      textAlign: 'center',
-      margin: '0 0 20px'
-    }
+  record: {
+    marginTop: '20px'
   },
   timer: {
     position: 'relative',
-    height: '100px'
+    height: '218px'
   },
   seconds: {
     position: 'absolute !important',
@@ -35,11 +30,20 @@ const styles = {
     left: '0',
     right: '0',
     margin: '0 auto'
+  },
+  control: {
+    position: 'relative',
+    top: '32px',
+    boxShadow: 'none !important'
+  },
+  display: {
+    position: 'relative',
+    top: '64px'
   }
 }
 
 export default injectSheet(styles)(
   connect((state) => {
       return {}
-  }, {})(Track)
+  }, {})(Record)
 )

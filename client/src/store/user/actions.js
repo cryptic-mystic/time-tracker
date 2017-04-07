@@ -14,6 +14,12 @@ export function authenticated(token) {
     }
 }
 
+export function logout() {
+    return {
+        type: actionTypes.LOGOUT
+    }
+}
+
 // thunks
 export function signUp(username, email, password) {
     return function (dispatch) {
@@ -46,5 +52,6 @@ export function signIn(email, password) {
 export default {
     actionTypes,
     signUp,
-    signIn
+    signIn,
+    logout
 }

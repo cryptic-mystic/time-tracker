@@ -1,5 +1,4 @@
 import React from 'react'
-import uuidV4 from 'uuid/v4'
 
 import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'

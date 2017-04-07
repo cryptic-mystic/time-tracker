@@ -1,41 +1,38 @@
-import React from 'react'
-import Paper from 'material-ui/Paper'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import DefaultLayout from './DefaultLayout'
+
 import injectSheet from 'react-jss'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
+
+import { snackbarHide } from '../../store/snackbar/actions'
 
 import stylesheet from './style.css'
-
-const muiTheme = getMuiTheme({
-    fontFamily: "'Montserrat', sans-serif"
-})
 
 const styles = {
     '@global': {
         '*': {
             fontFamily: "'Montserrat', sans-serif"
         }
+    },
+    navigation: {
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0
+    },
+    content: {
+        marginBottom: '70px',
+        position: 'absolute',
+        left: '10px',
+        right: '10px'
     }
 }
 
-class DefaultLayout extends React.Component {
-    static propTypes = {
-        children: React.PropTypes.element.isRequired
-    }
-
-    constructor(props) {
-        super(props)
-    }
-
-    render() {
-        let { classes, sheet, children } = this.props
-
-        return <MuiThemeProvider muiTheme={muiTheme}>
-            <div>
-                {children}
-            </div>
-        </MuiThemeProvider>
-    }
-}
-
-export default injectSheet(styles)(DefaultLayout)
+export default withRouter(injectSheet(styles)(
+    connect((state) => {
+        return {
+            snackbar: state.snackbar.toJS(),
+            authenticated: state.user.get('authenticated')
+        }
+    }, { snackbarHide })(DefaultLayout)
+))

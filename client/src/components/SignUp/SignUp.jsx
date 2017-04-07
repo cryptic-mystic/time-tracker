@@ -1,5 +1,4 @@
 import React from 'react'
-import uuidV4 from 'uuid/v4'
 
 import { Link } from 'react-router'
 
