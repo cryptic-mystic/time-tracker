@@ -39,6 +39,10 @@ const styles = {
   display: {
     position: 'relative',
     top: '64px'
+  },
+  distance: {
+    display: 'block !important',
+    margin: '0 auto 20px !important'
   }
 }
 

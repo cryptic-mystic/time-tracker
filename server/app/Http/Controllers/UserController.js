@@ -1,27 +1,35 @@
 'use strict'
 
-const User = use('App/Model/User')
-const Validator = use('Validator')
-const Hash = use('Hash')
-
 class UserController {
 
+  static get inject () {
+    return ['App/Model/User', 'App/Model/TimeEntry', 'Validator', 'Hash'] 
+  }
+
+  constructor (User, TimeEntry, Validator, Hash) { 
+    this.User = User
+    this.TimeEntry = TimeEntry
+    this.Validator = Validator
+    this.Hash = Hash
+  }
+
   * index(request, response) {
-    response.ok(yield User.all())
+    // Todo require auth & manager | admin permissions
+    response.ok(yield this.User.all())
   }
 
   * store(request, response) {
     var body = request.only('username', 'email', 'password')
 
-    const validation = yield Validator.validate(body, User.rules, User.messages)
+    const validation = yield this.Validator.validate(body, this.User.rules, this.User.messages)
 
     if (validation.fails()) {
       response.ok({ errors: validation.messages() })
       return
     }
 
-    body.password = yield Hash.make(body.password)
-    var user = yield User.create(body)
+    body.password = yield this.Hash.make(body.password)
+    var user = yield this.User.create(body)
 
     try {
       var email = request.input('email'), password = request.input('password')
@@ -43,6 +51,7 @@ class UserController {
   }
 
   * profile(request, response) {
+    // Todo pull record of user times
     const user = yield request.auth.getUser()
     if (user) {
       response.ok(user)
@@ -52,18 +61,22 @@ class UserController {
   }
 
   * show(request, response) {
+    // Todo require auth & manager | admin permissions
     yield response.json({ message: 'Not implemented yet! (show)' })
   }
 
   * edit(request, response) {
+    // Todo require auth & manager | admin permissions
     yield response.json({ message: 'Not implemented yet! (edit)' })
   }
 
   * update(request, response) {
+    // Todo require auth & manager | admin permissions
     yield response.json({ message: 'Not implemented yet! (update)' })
   }
 
   * destroy(request, response) {
+    // Todo require auth & manager | admin permissions
     yield response.json({ message: 'Not implemented yet! (destroy)' })
   }
 

@@ -49,9 +49,23 @@ export function signIn(email, password) {
     }
 }
 
+export function createTime() {
+    return function (dispatch) {
+        console.log('Create new time!')
+    }
+}
+
+export function getProfile() {
+    return function (dispatch) {
+        console.log('Refresh user profile!')
+    }
+}
+
 export default {
     actionTypes,
     signUp,
     signIn,
-    logout
+    logout,
+    createTime,
+    getProfile
 }

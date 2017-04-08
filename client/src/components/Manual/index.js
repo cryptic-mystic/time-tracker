@@ -21,6 +21,10 @@ const styles = {
   },
   time: {
     marginTop: '60px'
+  },
+  distance: {
+    display: 'block !important',
+    margin: '0 auto 20px !important'
   }
 }
 

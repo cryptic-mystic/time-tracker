@@ -4,8 +4,13 @@ import FontIcon from 'material-ui/FontIcon'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import CircularProgress from 'material-ui/CircularProgress'
+import TextField from 'material-ui/TextField'
 
 export default class Record extends React.Component {
+    static propTypes = {
+        confirmTrack: React.PropTypes.func.isRequired
+    }
+
     constructor(props) {
         super(props)
 
@@ -15,16 +20,27 @@ export default class Record extends React.Component {
           milliseconds: 0,
           seconds: 0,
           minutes: 0,
-          hours: 0
+          hours: 0,
+          distance: {
+            value: '',
+            error: undefined
+          },
         }
 
         this.toggleTimer = this.toggleTimer.bind(this)
         this.increment = this.increment.bind(this)
         this.twoDigits = this.twoDigits.bind(this)
+        this.isValid = this.isValid.bind(this)
     }
 
     componentWillUnmount() {
         clearInterval(this.state.timerId)
+    }
+
+    isValid() {
+      let { milliseconds, seconds, minutes, hours, distance, active } = this.state
+
+      return typeof distance.error === 'undefined' && distance.value !== '' && !active
     }
 
     toggleTimer() {
@@ -78,12 +94,12 @@ export default class Record extends React.Component {
     }
 
     render() {
-        let { classes, sheet } = this.props,
-          { active, seconds, minutes, hours, milliseconds } = this.state,
+        let { classes, sheet, confirmTrack } = this.props,
+          { active, seconds, minutes, hours, milliseconds, distance } = this.state,
           self = this
 
         return <div className={classes.record}>
-          <h1>Record</h1>
+          <h1>Timer</h1>
           <div className={classes.timer}>
             <CircularProgress mode="determinate"
               className={classes.seconds}
@@ -121,7 +137,23 @@ export default class Record extends React.Component {
             <h2 className={classes.display}>{this.twoDigits(hours)}:{this.twoDigits(minutes)}:{this.twoDigits(seconds)}:{this.twoDigits(milliseconds)}</h2>
           </div>
 
-          <RaisedButton primary={true} disabled={active} label="Save" />
+          <TextField
+            className={classes.distance}
+            floatingLabelText="Distance (miles)"
+            value={distance.value}
+            name='distance'
+            errorText={distance.error}
+            onChange={(event) => {
+              var raw = event.target.value
+
+              if (/^[0-9]+(\.[0-9]+)?$/.test(raw)) self.setState({ distance: { value: raw, error: undefined } })
+              else self.setState({ distance: { value: raw, error: 'Please enter a valid decimal' } })
+            }}
+          /><br />
+
+          <RaisedButton primary={true} disabled={!this.isValid()} label="Save"
+            onTouchTap={() => confirmTrack(hours, minutes, seconds, milliseconds, distance.value, new Date())}
+          />
         </div>
     }
 }

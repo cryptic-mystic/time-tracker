@@ -21,9 +21,10 @@ class User extends Lucid {
 
   static get rules() { 
     return {
-      username: 'required|unique:users',
+      username: 'required|string|alpha_numeric|unique:users',
       email: 'required|email|unique:users',
-      password: 'required',
+      password: 'required|min:6|max:30',
+      role: 'string|in:admin,manager,member'
     }
   }
 
@@ -31,10 +32,13 @@ class User extends Lucid {
     return {
       'username.required': 'A username is required',
       'username.unique': 'This username is already in use',
+      'username.alpha_numeric': 'Username can only contain letters and numbers',
       'email.required': 'A valid email is required',
       'email.email': 'Must be a valid email address',
       'email.unique': 'This email has already been registered',
-      'password.required': 'A password is required'
+      'password.required': 'A password is required',
+      'password.min': 'Password must at least 6 characters',
+      'password.max': 'Password connot exceed 30 characters'
     }
   }
 }

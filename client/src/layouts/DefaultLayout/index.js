@@ -18,7 +18,8 @@ const styles = {
         position: 'fixed',
         bottom: 0,
         left: 0,
-        right: 0
+        right: 0,
+        zIndex: 100
     },
     content: {
         marginBottom: '70px',

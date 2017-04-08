@@ -23,4 +23,6 @@ Route.group('version1', function () {
   Route.get('users/profile', 'UserController.profile')
   Route.post('users/login', 'UserController.login')
   Route.resource('users', 'UserController')
+
+  Route.resource('time', 'TimeController')
 }).prefix('api/v1')
