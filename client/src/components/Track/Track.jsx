@@ -16,26 +16,57 @@ export default class Track extends React.Component {
         this.state = {
           modeToggle: true,
           confirmOpen: false,
+          loading: false,
           values: {}
         }
 
         this.confirmTrack = this.confirmTrack.bind(this)
+        this.zeroPad = this.zeroPad.bind(this)
         this.handleClose = this.handleClose.bind(this)
     }
 
     confirmTrack(hours, minutes, seconds, milliseconds, distance, date) {
+      var month = this.zeroPad(date.getMonth()+1),
+        day = this.zeroPad(date.getDate())
+
       this.setState({
         values: {
           time: `${hours}:${minutes}:${seconds}:${milliseconds}`,
           distance,
-          date: `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
+          date: `${date.getFullYear()}-${month}-${day}`
         },
         confirmOpen: true
       })
     }
 
+    zeroPad(value) {
+      return (value + '').length === 1 ? `0${value}` : value
+    }
+
     handleClose(wasSubmitted) {
-      this.setState({ confirmOpen: false, values: {} })
+      let { createTime } = this.props,
+        { date, time, distance } = this.state.values,
+        self = this
+      
+      if (wasSubmitted) {
+        self.setState({ loading: true })
+        createTime(date, time, distance)
+          .then(function (success) {
+            self.setState({
+              loading: false,
+              confirmOpen: false,
+              values: {}
+            })
+          })
+          .catch(function (failure) {
+            debugger
+          })
+        } else {
+          self.setState({
+            confirmOpen: false,
+            values: {}
+          })
+        }
     }
 
     render() {

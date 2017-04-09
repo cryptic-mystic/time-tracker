@@ -7,8 +7,8 @@ class TimeEntriesTableSchema extends Schema {
   up () {
     this.create('time_entries', (table) => {
       table.date('date')
-      table.time('time')
-      table.decimal('distance', 2)
+      table.string('time')
+      table.decimal('distance')
       table.integer('user_id').unsigned()
       table.foreign('user_id').references('id').inTable('users')
       table.increments()

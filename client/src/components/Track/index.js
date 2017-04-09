@@ -3,6 +3,8 @@ import injectSheet from 'react-jss'
 
 import Track from './Track'
 
+import { createTime } from '../../store/user/actions'
+
 const styles = {
   track: {
     padding: '0 0 40px 0',
@@ -41,5 +43,5 @@ const styles = {
 export default injectSheet(styles)(
   connect((state) => {
       return {}
-  }, {})(Track)
+  }, { createTime })(Track)
 )

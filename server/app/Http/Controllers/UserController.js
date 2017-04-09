@@ -1,5 +1,10 @@
 'use strict'
 
+const Auth_Errors = {
+  UserNotFoundException: { field: 'email', message: 'Could not find a user with that email' },
+  PasswordMisMatchException: { field: 'password', message: 'Incorrect password' }
+}
+
 class UserController {
 
   static get inject () {
@@ -24,7 +29,7 @@ class UserController {
     const validation = yield this.Validator.validate(body, this.User.rules, this.User.messages)
 
     if (validation.fails()) {
-      response.ok({ errors: validation.messages() })
+      response.unauthorized({ errors: validation.messages() })
       return
     }
 
@@ -35,7 +40,7 @@ class UserController {
       var email = request.input('email'), password = request.input('password')
       response.ok({token: yield request.auth.attempt(email, password)})
     } catch (e) {
-      response.unauthorized({error: e.message})
+      response.unauthorized({ error: Auth_Errors[e.name] })
     }
   }
 
@@ -46,7 +51,7 @@ class UserController {
     try {
       response.ok({token: yield request.auth.attempt(email, password)})
     } catch (e) {
-      response.unauthorized({error: e.message})
+      response.unauthorized({ error: Auth_Errors[e.name] })
     }
   }
 

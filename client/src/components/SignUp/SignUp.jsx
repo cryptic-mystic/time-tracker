@@ -58,9 +58,14 @@ export default class SignUp extends React.Component {
             .then(function() {
                 router.push('/track')
             })
-            .catch(function(errors) {
-                // Todo handle errors here!
-                self.setState({ loading: false })
+            .catch(function(error) {
+                self.setState({
+                    loading: false,
+                    [`${error.field}`]: {
+                        value: self.state[`${error.field}`].value,
+                        error: error.message
+                    }
+                })
             })
     }
 
@@ -82,18 +87,21 @@ export default class SignUp extends React.Component {
             floatingLabelText="Username"
             fullWidth={true}
             value={username.value}
+            errorText={username.error}
             onChange={(event) => self.setState({ username: { value: event.target.value } })}
           />
           <TextField
             floatingLabelText="Email"
             fullWidth={true}
             value={email.value}
+            errorText={email.error}
             onChange={(event) => self.setState({ email: { value: event.target.value } })}
           />
           <TextField
             floatingLabelText="Password"
             fullWidth={true}
             value={password.value}
+            errorText={password.error}
             onChange={(event) => self.setState({ password: { value: event.target.value } })}
             type="password"
           />

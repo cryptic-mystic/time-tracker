@@ -9,12 +9,9 @@ class TimeEntry extends Lucid {
 
   static get rules() { 
     return {
-      date: 'required',
-      // date: 'required|date_format:YYYY-MM-DD',
-      // date: 'required|date',
-      time: 'required',
-      // username: ['regex:^[a-zA-z]+$']
-      distance: 'required|integer',
+      date: 'required|date_format:YYYY-MM-DD',
+      time: 'required|string|timeentry',
+      distance: 'required',
       user_id: 'required|integer'
     }
   }
@@ -23,6 +20,7 @@ class TimeEntry extends Lucid {
     return {
       'date.required': 'A valid is date required',
       'time.required': 'A valid is time required',
+      'time.timeentry': 'Please provide a valid time format',
       'distance.required': 'A valid is distance required',
       'user_id.required': 'A valid is user_id required'
     }

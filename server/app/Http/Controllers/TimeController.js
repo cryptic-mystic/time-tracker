@@ -3,17 +3,33 @@
 class TimeController {
 
   static get inject () {
-    return ['App/Model/User', 'App/Model/TimeEntry']
+    return ['App/Model/User', 'App/Model/TimeEntry', 'Validator']
   }
 
-  constructor (User, TimeEntry) { 
+  constructor (User, TimeEntry, Validator) { 
     this.User = User
     this.TimeEntry = TimeEntry
+    this.Validator = Validator
   }
 
   * store(request, response) {
-    // require login
-    // create new time entry for user
+    const user = yield request.auth.getUser()
+    if (!user) {
+      response.unauthorized('You must login to perform this action')
+      return
+    }
+
+    var body = request.only('date', 'time', 'distance')
+    body.user_id = user.id
+
+    const validation = yield this.Validator.validate(body, this.TimeEntry.rules, this.TimeEntry.messages)
+
+    if (validation.fails()) {
+      response.ok({ errors: validation.messages() })
+      return
+    }
+
+    response.ok(yield this.TimeEntry.create(body))
   }
 
   * show(request, response) {

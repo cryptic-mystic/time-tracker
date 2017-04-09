@@ -37,8 +37,8 @@ class User extends Lucid {
       'email.email': 'Must be a valid email address',
       'email.unique': 'This email has already been registered',
       'password.required': 'A password is required',
-      'password.min': 'Password must at least 6 characters',
-      'password.max': 'Password connot exceed 30 characters'
+      'password.min': 'Password must be at least 6 characters',
+      'password.max': 'Password cannot exceed 30 characters'
     }
   }
 }

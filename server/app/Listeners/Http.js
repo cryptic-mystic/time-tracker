@@ -38,4 +38,21 @@ Http.handleError = function * (error, request, response) {
  * starting http server.
  */
 Http.onStart = function () {
+
+  // Custom time validator
+  const Validator = use('Adonis/Addons/Validator')
+  Validator.extend('timeentry', (data, field, message, args, get) => {
+
+    return new Promise((resolve, reject) => {
+      const fieldValue = get(data, field)
+      if (fieldValue.match(/([0-9]{0,2}:){3}[0-9]+/)) {
+        resolve('Allowed')
+        return
+      }
+      reject(message)
+    })
+
+  }, 'Invalid time format')
+
+  // Additional onstart methods
 }
