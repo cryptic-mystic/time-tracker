@@ -25,7 +25,7 @@ class TimeController {
     const validation = yield this.Validator.validate(body, this.TimeEntry.rules, this.TimeEntry.messages)
 
     if (validation.fails()) {
-      response.ok({ errors: validation.messages() })
+      response.badRequest({ errors: validation.messages() })
       return
     }
 
@@ -43,13 +43,34 @@ class TimeController {
   }
 
   * update(request, response) {
-    // require login
-    // require time entry to belong to user, or admin permissions
+    const user = yield request.auth.getUser()
+    if (!user) {
+      response.unauthorized('You must login to perform this action')
+      return
+    }
+
+    var body = request.only('id', 'date', 'time', 'distance')
+
+    response.ok()
   }
 
   * destroy(request, response) {
-    // require login
-    // require time entry to belong to user, or admin permissions
+    const user = yield request.auth.getUser()
+    if (!user) {
+      response.unauthorized('You must login to perform this action')
+      return
+    }
+
+    var id = request.param('id'),
+      timeEntry = yield this.TimeEntry.find(id)
+
+    if (timeEntry && timeEntry.user_id === user.id) {
+      response.ok(yield timeEntry.delete())
+      return
+    } else {
+      response.unauthorized('Cannot delete this resource')
+      return
+    }
   }
 
 }

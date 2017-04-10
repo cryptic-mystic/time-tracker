@@ -10,6 +10,20 @@ export function create(date, time, distance, token) {
     })
 }
 
+export function remove(id, token) {
+    return a.delete(`/${id}`, {
+      headers: {'Authorization': `Bearer ${token}`}
+    })
+}
+
+export function update(id, token) {
+    // return a.delete(`/${id}`, {
+    //   headers: {'Authorization': `Bearer ${token}`}
+    // })
+}
+
 export default {
-    create
+    create,
+    update,
+    remove
 }

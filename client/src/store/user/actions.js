@@ -4,7 +4,9 @@ import timeEntryService from '../../api/timeEntryService'
 // actionTypes
 export const actionTypes = {
     AUTHENTICATED: 'AUTHENTICATED',
-    LOGOUT: 'LOGOUT'
+    LOGOUT: 'LOGOUT',
+    USER_UPDATED: 'USER_UPDATED',
+    TIME_DELETED: 'TIME_DELETED'
 }
 
 // actions
@@ -18,6 +20,20 @@ export function authenticated(token) {
 export function logout() {
     return {
         type: actionTypes.LOGOUT
+    }
+}
+
+export function userUpdated(details) {
+    return {
+        type: actionTypes.USER_UPDATED,
+        details
+    }
+}
+
+export function timeRemoved(id) {
+    return {
+        type: actionTypes.TIME_DELETED,
+        id
     }
 }
 
@@ -72,9 +88,38 @@ export function createTime(date, time, distance) {
     }
 }
 
+export function deleteTime(id) {
+    return function (dispatch, getState) {
+        let { user } = getState(),
+            token = user.get('token')
+
+        return timeEntryService.remove(id, token)
+            .then(function (success) {
+                dispatch(timeRemoved(success.data))
+                return true
+            })
+            .catch(function (failure) {
+                debugger
+                throw failure
+            })
+    }
+}
+
 export function getProfile() {
-    return function (dispatch) {
-        console.log('Refresh user profile!')
+    return function (dispatch, getState) {
+        let { user } = getState(),
+            token = user.get('token')
+
+        return userService.profile(token)
+            .then(function (success) {
+                console.log(success.data)
+                dispatch(userUpdated(success.data))
+                return success.data
+            })
+            .catch(function (failure) {
+                debugger
+                throw failure
+            })
     }
 }
 
@@ -84,5 +129,6 @@ export default {
     signIn,
     logout,
     createTime,
+    deleteTime,
     getProfile
 }

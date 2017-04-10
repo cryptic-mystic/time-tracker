@@ -1,15 +1,29 @@
 'use strict'
 
 const Lucid = use('Lucid')
+const Antl = use('Antl')
 
 class TimeEntry extends Lucid {
   user() {
     return this.belongsTo('App/Model/User')
   }
 
+  static get computed () {
+    return ['date_display']
+  }
+
+  getDateDisplay() {
+    return Antl.formatDate(new Date(this.date), {
+      weekday: 'short',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    })
+  }
+
   static get rules() { 
     return {
-      date: 'required|date_format:YYYY-MM-DD',
+      date: 'required|date',
       time: 'required|string|timeentry',
       distance: 'required',
       user_id: 'required|integer'

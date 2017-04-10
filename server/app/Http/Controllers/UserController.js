@@ -56,10 +56,12 @@ class UserController {
   }
 
   * profile(request, response) {
-    // Todo pull record of user times
     const user = yield request.auth.getUser()
     if (user) {
-      response.ok(user)
+      var profile = yield this.User.find(user.id),
+        timeEntries = yield profile.timeEntries().orderBy('date', 'desc').fetch()
+
+      response.ok({ profile, timeEntries })
       return
     }
     response.unauthorized('You must login to view your profile')

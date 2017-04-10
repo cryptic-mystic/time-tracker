@@ -12,7 +12,14 @@ export function signUp(username, email, password) {
     return a.post('/', { username, email, password })
 }
 
+export function profile(token) {
+    return a.get('/profile', {
+      headers: {'Authorization': `Bearer ${token}`}
+    })
+}
+
 export default {
     signIn,
-    signUp
+    signUp,
+    profile
 }

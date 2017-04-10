@@ -4,7 +4,8 @@ import Immutable from 'immutable'
 export var initialState = Immutable.Map({
     authenticated: false,
     token: null,
-    profile: null
+    profile: null,
+    timeEntries: null
 })
 
 export function user(state, action) {
@@ -18,6 +19,11 @@ export function user(state, action) {
             })
         case actionTypes.LOGOUT:
             return initialState
+        case actionTypes.USER_UPDATED:
+            return state.merge(Immutable.fromJS(action.details))
+        case actionTypes.TIME_DELETED:
+            console.log(`remove time ${action.id}`)
+            return state
     }
 
     return state

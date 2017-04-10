@@ -27,17 +27,27 @@ export default class DefaultLayout extends React.Component {
         this.willEnter = this.willEnter.bind(this)
         this.willLeave = this.willLeave.bind(this)
         this.renderChildren = this.renderChildren.bind(this)
+        this.updateTab = this.updateTab.bind(this)
     }
 
     componentWillMount() {
+        this.updateTab()
+    }
+
+    componentWillUpdate() {
+        this.updateTab()
+    }
+
+    updateTab() {
         let { location } = this.props
 
         switch (location.pathname) {
             case '/profile':
-                this.setState({ navIndex: 1 })
+                if (this.state.navIndex !== 1) this.setState({ navIndex: 1 })
                 break
             case '/track':
-                this.setState({ navIndex: 0 })
+            default:
+                if (this.state.navIndex !== 0) this.setState({ navIndex: 0 })
                 break
         }
     }

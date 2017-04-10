@@ -24,6 +24,7 @@ const providers = [
   'adonis-framework/providers/SessionProvider',
   'adonis-framework/providers/StaticProvider',
   'adonis-framework/providers/ViewProvider',
+  'adonis-antl/providers/AntlProvider',
   'adonis-lucid/providers/DatabaseProvider',
   'adonis-lucid/providers/LucidProvider',
   'adonis-lucid/providers/FactoryProvider',
@@ -78,7 +79,9 @@ const aliases = {
   Schema: 'Adonis/Src/Schema',
   View: 'Adonis/Src/View',
   Ws: 'Adonis/Addons/Ws',
-  Validator: 'Adonis/Addons/Validator'
+  Validator: 'Adonis/Addons/Validator',
+  Antl: 'Adonis/Addons/Antl',
+  Formats: 'Adonis/Addons/AntlFormats'
 }
 
 /*
@@ -110,7 +113,8 @@ const commands = [
   'Adonis/Commands/Migration:Reset',
   'Adonis/Commands/DB:Seed',
   'Adonis/Commands/Migration:Status',
-  'Adonis/Commands/Key:Generate'
+  'Adonis/Commands/Key:Generate',
+  'Adonis/Commands/Antl:Setup'
 ]
 
 module.exports = { providers, aceProviders, aliases, commands }
