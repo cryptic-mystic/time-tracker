@@ -42,7 +42,6 @@ export function signUp(username, email, password) {
     return function (dispatch) {
         return userService.signUp(username, email, password)
             .then(function (success) {
-                console.log(success)
                 dispatch(authenticated(success.data.token))
             })
             .catch(function (failure) {
@@ -59,7 +58,6 @@ export function signIn(email, password) {
     return function (dispatch) {
         return userService.signIn(email, password)
             .then(function (success) {
-                console.log(success)
                 dispatch(authenticated(success.data.token))
             })
             .catch(function (failure) {
@@ -96,7 +94,7 @@ export function deleteTime(id) {
         return timeEntryService.remove(id, token)
             .then(function (success) {
                 dispatch(timeRemoved(success.data))
-                return true
+                return success.data
             })
             .catch(function (failure) {
                 debugger
@@ -112,7 +110,6 @@ export function getProfile() {
 
         return userService.profile(token)
             .then(function (success) {
-                console.log(success.data)
                 dispatch(userUpdated(success.data))
                 return success.data
             })

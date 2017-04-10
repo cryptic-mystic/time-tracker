@@ -44,7 +44,7 @@ export default class Track extends React.Component {
     }
 
     handleClose(wasSubmitted) {
-      let { createTime } = this.props,
+      let { createTime, snackbarMessage } = this.props,
         { date, time, distance } = this.state.values,
         self = this
       
@@ -52,6 +52,7 @@ export default class Track extends React.Component {
         self.setState({ loading: true })
         createTime(date, time, distance)
           .then(function (success) {
+            snackbarMessage('Recorded time')
             self.setState({
               loading: false,
               confirmOpen: false,
@@ -59,7 +60,7 @@ export default class Track extends React.Component {
             })
           })
           .catch(function (failure) {
-            debugger
+            snackbarMessage('ERROR RECORDING TIME, please try again')
           })
         } else {
           self.setState({

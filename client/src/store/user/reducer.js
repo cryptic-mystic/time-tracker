@@ -22,8 +22,12 @@ export function user(state, action) {
         case actionTypes.USER_UPDATED:
             return state.merge(Immutable.fromJS(action.details))
         case actionTypes.TIME_DELETED:
-            console.log(`remove time ${action.id}`)
-            return state
+            var timeEntries = state.get('timeEntries'),
+                indexToRemove = timeEntries.findIndex((entry) => entry.get('id') === action.id)
+
+            return state.set('timeEntries',
+                state.get('timeEntries').remove(indexToRemove)
+            )
     }
 
     return state

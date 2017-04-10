@@ -21,7 +21,7 @@ module.exports = {
   | Comma seperated HTTP methods to be allowed.
   |
   */
-  methods: 'GET, PUT, POST',
+  methods: 'GET, PUT, POST, DELETE',
 
   /*
   |--------------------------------------------------------------------------

@@ -7,19 +7,21 @@ import CircularProgress from 'material-ui/CircularProgress'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import FontIcon from 'material-ui/FontIcon'
 
+import DeleteDialog from '../DeleteDialog'
+
 export default class Profile extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
           loading: true,
+          deleteConfirmOpen: false,
           selected: null
         }
 
         this.logout = this.logout.bind(this)
         this.renderTimes = this.renderTimes.bind(this)
         this.renderProfile = this.renderProfile.bind(this)
-        this.delete = this.delete.bind(this)
         this.update = this.update.bind(this)
     }
 
@@ -77,7 +79,11 @@ export default class Profile extends React.Component {
       return entries && entries.length ? <div>
           <div className={classes.controls}>
             <RaisedButton disabled={!isSelected} label="Update" onTouchTap={this.update}/>
-            <RaisedButton disabled={!isSelected} secondary={true} label="Delete" onTouchTap={this.delete}/>
+            <RaisedButton disabled={!isSelected}
+              secondary={true}
+              label="Delete"
+              onTouchTap={() => self.setState({ deleteConfirmOpen: true })}
+            />
           </div>
           <Table onCellClick={(row, col) => 
             self.setState({ selected: selected === row ? null : row })}
@@ -104,14 +110,6 @@ export default class Profile extends React.Component {
         <div>No time records have been recorded yet. Go track!</div>
     }
 
-    delete() {
-      let { deleteTime } = this.props,
-        { selected } = this.state
-
-      console.log(`Selected: ${selected}`)
-      // pop up confirm modal
-    }
-
     update() {
       let { updateTime } = this.props,
         { selected } = this.state
@@ -121,7 +119,10 @@ export default class Profile extends React.Component {
     }
 
     render() {
-        let { classes, sheet, profile, entries } = this.props
+        let { classes, sheet, profile, entries } = this.props,
+          { deleteConfirmOpen, selected } = this.state,
+          selectedEntry = entries && entries.length && selected !== null ? entries[selected] : null,
+          self = this
 
         return <Paper className={classes.profile} zDepth={2}>
           <h2>Profile</h2>
@@ -133,6 +134,12 @@ export default class Profile extends React.Component {
               thickness={8}
             /> : this.renderProfile() }
           </div>
+
+          <DeleteDialog
+            recordToDelete={selectedEntry}
+            open={deleteConfirmOpen}
+            onRequestClose={() => self.setState({ deleteConfirmOpen: false })}
+          />
 
           <RaisedButton primary={true} label="Logout" onTouchTap={this.logout}/>
         </Paper>

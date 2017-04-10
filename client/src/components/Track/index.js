@@ -4,6 +4,7 @@ import injectSheet from 'react-jss'
 import Track from './Track'
 
 import { createTime } from '../../store/user/actions'
+import { snackbarMessage } from '../../store/snackbar/actions'
 
 const styles = {
   track: {
@@ -43,5 +44,5 @@ const styles = {
 export default injectSheet(styles)(
   connect((state) => {
       return {}
-  }, { createTime })(Track)
+  }, { createTime, snackbarMessage })(Track)
 )
