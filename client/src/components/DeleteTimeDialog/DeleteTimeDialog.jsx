@@ -3,7 +3,7 @@ import React from 'react'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 
-export default class DeleteDialog extends React.Component {
+export default class DeleteTimeDialog extends React.Component {
   static propTypes = {
     open: React.PropTypes.bool.isRequired,
     onRequestClose: React.PropTypes.func.isRequired,

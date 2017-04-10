@@ -35,6 +35,7 @@ class TimeEntry extends Lucid {
       'date.required': 'A valid is date required',
       'time.required': 'A valid is time required',
       'time.timeentry': 'Please provide a valid time format',
+      'time.string': 'Time must be a string',
       'distance.required': 'A valid is distance required',
       'user_id.required': 'A valid is user_id required'
     }

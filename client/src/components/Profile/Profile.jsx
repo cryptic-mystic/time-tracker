@@ -7,7 +7,8 @@ import CircularProgress from 'material-ui/CircularProgress'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
 import FontIcon from 'material-ui/FontIcon'
 
-import DeleteDialog from '../DeleteDialog'
+import DeleteTimeDialog from '../DeleteTimeDialog'
+import UpdateTimeDialog from '../UpdateTimeDialog'
 
 export default class Profile extends React.Component {
     constructor(props) {
@@ -16,13 +17,13 @@ export default class Profile extends React.Component {
         this.state = {
           loading: true,
           deleteConfirmOpen: false,
+          updateDialogOpen: false,
           selected: null
         }
 
         this.logout = this.logout.bind(this)
         this.renderTimes = this.renderTimes.bind(this)
         this.renderProfile = this.renderProfile.bind(this)
-        this.update = this.update.bind(this)
     }
 
     componentWillMount() {
@@ -78,7 +79,10 @@ export default class Profile extends React.Component {
 
       return entries && entries.length ? <div>
           <div className={classes.controls}>
-            <RaisedButton disabled={!isSelected} label="Update" onTouchTap={this.update}/>
+            <RaisedButton disabled={!isSelected}
+              label="Update"
+              onTouchTap={() => self.setState({ updateDialogOpen: true })}
+            />
             <RaisedButton disabled={!isSelected}
               secondary={true}
               label="Delete"
@@ -110,17 +114,9 @@ export default class Profile extends React.Component {
         <div>No time records have been recorded yet. Go track!</div>
     }
 
-    update() {
-      let { updateTime } = this.props,
-        { selected } = this.state
-
-      console.log(`Selected: ${selected}`)
-      // pop up update modal
-    }
-
     render() {
         let { classes, sheet, profile, entries } = this.props,
-          { deleteConfirmOpen, selected } = this.state,
+          { deleteConfirmOpen, selected, updateDialogOpen } = this.state,
           selectedEntry = entries && entries.length && selected !== null ? entries[selected] : null,
           self = this
 
@@ -135,10 +131,16 @@ export default class Profile extends React.Component {
             /> : this.renderProfile() }
           </div>
 
-          <DeleteDialog
+          <DeleteTimeDialog
             recordToDelete={selectedEntry}
             open={deleteConfirmOpen}
             onRequestClose={() => self.setState({ deleteConfirmOpen: false })}
+          />
+
+          <UpdateTimeDialog
+            recordToUpdate={selectedEntry}
+            open={updateDialogOpen}
+            onRequestClose={() => self.setState({ updateDialogOpen: false })}
           />
 
           <RaisedButton primary={true} label="Logout" onTouchTap={this.logout}/>

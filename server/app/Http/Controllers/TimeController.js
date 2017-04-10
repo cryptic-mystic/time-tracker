@@ -49,9 +49,25 @@ class TimeController {
       return
     }
 
-    var body = request.only('id', 'date', 'time', 'distance')
+    var id = request.param('id'),
+      updates = request.only('date', 'time', 'distance'),
+      timeEntry = yield this.TimeEntry.find(id)
 
-    response.ok()
+    if (timeEntry && timeEntry.user_id === user.id) {
+      timeEntry.fill(updates)
+      const validation = yield this.Validator.validate(timeEntry, this.TimeEntry.rules, this.TimeEntry.messages)
+
+      if (validation.fails()) {
+        response.badRequest({ errors: validation.messages() })
+        return
+      }
+
+      response.ok(yield timeEntry.save())
+      return
+    } else {
+      response.unauthorized('Cannot update this resource')
+      return
+    }
   }
 
   * destroy(request, response) {

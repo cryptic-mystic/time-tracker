@@ -3,8 +3,7 @@ import injectSheet from 'react-jss'
 
 import Profile from './Profile'
 
-import { logout, getProfile, deleteTime } from '../../store/user/actions'
-import { snackbarMessage } from '../../store/snackbar/actions'
+import { logout, getProfile } from '../../store/user/actions'
 
 const styles = {
   profile: {
@@ -35,5 +34,5 @@ export default injectSheet(styles)(
         profile: state.user.get('profile') ? state.user.get('profile').toJS() : null,
         entries: state.user.get('timeEntries') ? state.user.get('timeEntries').toJS() : null
       }
-  }, { logout, getProfile, deleteTime, snackbarMessage })(Profile)
+  }, { logout, getProfile })(Profile)
 )
