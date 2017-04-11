@@ -51,6 +51,7 @@ export function signUp(username, email, password) {
         return userService.signUp(username, email, password)
             .then(function (success) {
                 dispatch(authenticated(success.data.token))
+                dispatch(getProfile())
             })
             .catch(function (failure) {
                 var { error, errors } = failure.response.data
@@ -67,6 +68,7 @@ export function signIn(email, password) {
         return userService.signIn(email, password)
             .then(function (success) {
                 dispatch(authenticated(success.data.token))
+                dispatch(getProfile())
             })
             .catch(function (failure) {
                 var { error, errors } = failure.response.data

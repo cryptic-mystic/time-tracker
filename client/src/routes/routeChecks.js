@@ -10,4 +10,28 @@ export function requiresAuthentication(store) {
   }
 }
 
-export default { requiresAuthentication }
+export function requiresManager(store) {
+  return function (args, replace) {
+    var { user } = store.getState(),
+      role = user.getIn(['profile', 'role'])
+
+    if (role !== 'manager' && role !== 'admin') {
+      store.dispatch(snackbarMessage('This page requires manager permissions'))
+      replace('/profile')
+    }
+  }
+}
+
+export function requiresAdmin(store) {
+  return function (args, replace) {
+    var { user } = store.getState(),
+      role = user.getIn(['profile', 'role'])
+
+    if (role !== 'admin') {
+      store.dispatch(snackbarMessage('This page requires admin permissions'))
+      replace('/profile')
+    }
+  }
+}
+
+export default { requiresAuthentication, requiresManager, requiresAdmin }

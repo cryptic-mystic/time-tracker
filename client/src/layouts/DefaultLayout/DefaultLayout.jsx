@@ -71,10 +71,40 @@ export default class DefaultLayout extends React.Component {
     }
 
     render() {
-        let { classes, sheet, children, snackbar, snackbarHide, authenticated, router, location } = this.props,
+        let { classes, sheet, children, snackbar, snackbarHide, authenticated, router, location, isManager } = this.props,
             { navIndex } = this.state,
             pathname = location.pathname,
             self = this
+
+        var navMenu = [
+            <BottomNavigationItem key={0}
+                label="Track"
+                icon={<FontIcon className="icon-clock" />}
+                onTouchTap={() => {
+                    router.push('/track')
+                    self.setState({ navIndex: 0 })
+                }}
+            />,
+            <BottomNavigationItem key={1}
+                label="Profile"
+                icon={<FontIcon className="icon-user" />}
+                onTouchTap={() => {
+                    router.push('/profile')
+                    self.setState({ navIndex: 1 })
+                }}
+            />
+        ]
+
+        if (isManager) {
+            navMenu.push(<BottomNavigationItem key={2}
+                label="Users"
+                icon={<FontIcon className="icon-users" />}
+                onTouchTap={() => {
+                    router.push('/users')
+                    self.setState({ navIndex: 2 })
+                }}
+            />)
+        }
 
         return <MuiThemeProvider muiTheme={muiTheme}>
             <div>
@@ -99,22 +129,7 @@ export default class DefaultLayout extends React.Component {
                 {authenticated ? 
                   <Paper className={classes.navigation} zDepth={2}>
                     <BottomNavigation selectedIndex={navIndex}>
-                      <BottomNavigationItem
-                        label="Track"
-                        icon={<FontIcon className="icon-clock" />}
-                        onTouchTap={() => {
-                            router.push('/track')
-                            self.setState({ navIndex: 0 })
-                        }}
-                      />
-                      <BottomNavigationItem
-                        label="Profile"
-                        icon={<FontIcon className="icon-user" />}
-                        onTouchTap={() => {
-                            router.push('/profile')
-                            self.setState({ navIndex: 1 })
-                        }}
-                      />
+                      {navMenu}
                     </BottomNavigation>
                   </Paper>
                   : null

@@ -5,8 +5,9 @@ import SignIn from '../components/SignIn'
 import SignUp from '../components/SignUp'
 import Track from '../components/Track'
 import Profile from '../components/Profile'
+import UsersManager from '../components/UsersManager'
 
-import { requiresAuthentication } from './routeChecks'
+import { requiresAuthentication, requiresManager } from './routeChecks'
 
 export const appRoutes = (store) => ({
   path: '/',
@@ -26,6 +27,11 @@ export const appRoutes = (store) => ({
       path: '/profile',
       component: Profile,
       onEnter: requiresAuthentication(store)
+    },
+    {
+      path: '/users',
+      component: UsersManager,
+      onEnter: requiresManager(store)
     }
   ]
 })

@@ -31,9 +31,12 @@ const styles = {
 
 export default withRouter(injectSheet(styles)(
     connect((state) => {
+        var role = state.user.getIn(['profile', 'role'])
+
         return {
             snackbar: state.snackbar.toJS(),
-            authenticated: state.user.get('authenticated')
+            authenticated: state.user.get('authenticated'),
+            isManager: role === 'admin' || role === 'manager'
         }
     }, { snackbarHide })(DefaultLayout)
 ))
