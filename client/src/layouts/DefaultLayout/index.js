@@ -12,6 +12,16 @@ const styles = {
     '@global': {
         '*': {
             fontFamily: "'Montserrat', sans-serif"
+        },
+        '.clearfix': {
+            '&::after': {
+                'visibility': 'hidden',
+                'display': 'block',
+                'font-size': '0',
+                'content': '\'\'',
+                'clear': 'both',
+                'height': '0'
+            }
         }
     },
     navigation: {

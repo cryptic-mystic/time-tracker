@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { LineChart, Line, Tooltip } from 'recharts'
+import { LineChart, Line, Tooltip, XAxis } from 'recharts'
 import CircularProgress from 'material-ui/CircularProgress'
 import Measure from 'react-measure'
 
@@ -19,9 +19,9 @@ export default class WeeklyReport extends React.Component {
     this.props.getReport()
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    let { report } = nextProps,
-      { loading } = nextState
+  componentDidUpdate() {
+    let { report } = this.props,
+      { loading } = this.state
 
     if (report != null && loading) this.setState({ loading: false })
   }

@@ -147,12 +147,12 @@ export function getProfile() {
     }
 }
 
-export function getTimes() {
+export function getTimes(startDate, endDate) {
     return function (dispatch, getState) {
         let { user } = getState(),
             token = user.get('token')
 
-        return userService.times(token)
+        return userService.times(startDate, endDate, token)
             .then(function (success) {
                 dispatch(userUpdated(success.data))
                 return success.data

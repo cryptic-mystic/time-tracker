@@ -7,9 +7,25 @@ import { getTimes } from '../../store/user/actions'
 
 const styles = {
   controls: {
-    textAlign: 'right',
+    composes: ['clearfix'],
+    position: 'relative'
+  },
+  filterControls: {
+    width: '40%',
+    '@media (min-width: 545px)': {
+      display: 'block'
+    }
+  },
+  recordControls: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
     '& > div': {
       margin: '0 5px'
+    },
+    '@media (max-width: 545px)': {
+      display: 'block',
+      position: 'relative'
     }
   },
   loading: {

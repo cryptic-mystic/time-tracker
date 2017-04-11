@@ -64,10 +64,7 @@ class TimeController {
 
       response.ok(yield timeEntry.save())
       return
-    } else {
-      response.unauthorized('Cannot update this resource')
-      return
-    }
+    } else response.unauthorized('Cannot update this resource')
   }
 
   * destroy(request, response) {
@@ -80,13 +77,9 @@ class TimeController {
     var id = request.param('id'),
       timeEntry = yield this.TimeEntry.find(id)
 
-    if (timeEntry && timeEntry.user_id === user.id) {
+    if (timeEntry && timeEntry.user_id === user.id)
       response.ok(yield timeEntry.delete())
-      return
-    } else {
-      response.unauthorized('Cannot delete this resource')
-      return
-    }
+    else response.unauthorized('Cannot delete this resource')
   }
 
 }

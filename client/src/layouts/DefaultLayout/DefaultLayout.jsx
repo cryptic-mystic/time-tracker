@@ -45,6 +45,9 @@ export default class DefaultLayout extends React.Component {
             case '/profile':
                 if (this.state.navIndex !== 1) this.setState({ navIndex: 1 })
                 break
+            case '/users':
+                if (this.state.navIndex !== 2) this.setState({ navIndex: 2 })
+                break
             case '/track':
             default:
                 if (this.state.navIndex !== 0) this.setState({ navIndex: 0 })

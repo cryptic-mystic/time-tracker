@@ -5,6 +5,8 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Slider from 'material-ui/Slider'
 import TextField from 'material-ui/TextField'
 
+import { formatDigits, dateString } from '../../utils/helpers'
+
 export default class TimeForm extends React.Component {
   static propTypes = {
     onSave: React.PropTypes.func.isRequired,
@@ -31,9 +33,7 @@ export default class TimeForm extends React.Component {
     }
 
     this.isValid = this.isValid.bind(this)
-    this.formatDigits = this.formatDigits.bind(this)
     this.timeString = this.timeString.bind(this)
-    this.dateString = this.dateString.bind(this)
   }
 
   isValid() {
@@ -42,26 +42,10 @@ export default class TimeForm extends React.Component {
     return typeof distance.error === 'undefined' && distance.value !== '' && date !== null
   }
 
-  formatDigits(value, digits) {
-    var str = value + ''
-
-    if (str.length < digits) return `${Array(digits - str.length + 1).join('0')}${str}`
-    else if (str.length > digits) return str.substring(0, digits)
-    else return str
-  }
-
   timeString() {
     let { milliseconds, seconds, minutes, hours } = this.state
 
-    return `${this.formatDigits(hours, 2)}:${this.formatDigits(minutes, 2)}:${this.formatDigits(seconds, 2)}:${this.formatDigits(milliseconds, 3)}`
-  }
-
-  dateString() {
-    let { date } = this.state
-
-    if (date === null) return ''
-
-    return `${date.getFullYear()}-${this.formatDigits(date.getMonth()+1, 2)}-${this.formatDigits(date.getDate(), 2)}`
+    return `${formatDigits(hours, 2)}:${formatDigits(minutes, 2)}:${formatDigits(seconds, 2)}:${formatDigits(milliseconds, 3)}`
   }
 
   render() {
@@ -100,7 +84,7 @@ export default class TimeForm extends React.Component {
 
         <RaisedButton primary={true} label="Save"
           disabled={!this.isValid()}
-          onTouchTap={() => onSave(this.timeString(), distance.value, this.dateString())}
+          onTouchTap={() => onSave(this.timeString(), distance.value, dateString(date))}
         />
       </div>
   }

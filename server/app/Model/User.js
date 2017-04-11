@@ -23,7 +23,16 @@ class User extends Lucid {
     return {
       username: 'required|string|alpha_numeric|unique:users',
       email: 'required|email|unique:users',
-      password: 'required|min:6|max:30',
+      password: 'required|string|min:6|max:30',
+      role: 'string|in:admin,manager,member'
+    }
+  }
+
+  static get update_rules() { 
+    return {
+      username: 'string|alpha_numeric|unique:users',
+      email: 'email|unique:users',
+      password: 'string|min:6|max:30',
       role: 'string|in:admin,manager,member'
     }
   }

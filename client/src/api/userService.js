@@ -18,9 +18,10 @@ export function profile(token) {
     })
 }
 
-export function times(token) {
+export function times(startDate, endDate, token) {
     return a.get('/times', {
-      headers: {'Authorization': `Bearer ${token}`}
+      headers: {'Authorization': `Bearer ${token}`},
+      params: { startDate, endDate }
     })
 }
 
@@ -30,10 +31,31 @@ export function report(token) {
     })
 }
 
+export function users(token) {
+  return a.get('/', {
+    headers: {'Authorization': `Bearer ${token}`}
+  })
+}
+
+export function remove(id, token) {
+  return a.delete(`/${id}`, {
+    headers: {'Authorization': `Bearer ${token}`}
+  })
+}
+
+export function update(id, values, token) {
+    return a.put(`/${id}`, values, {
+      headers: {'Authorization': `Bearer ${token}`}
+    })
+}
+
 export default {
     signIn,
     signUp,
     profile,
     times,
-    report
+    report,
+    users,
+    remove,
+    update
 }

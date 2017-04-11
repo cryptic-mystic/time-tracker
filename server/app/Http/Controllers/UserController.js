@@ -23,8 +23,12 @@ class UserController {
   }
 
   * index(request, response) {
-    // Todo require auth & manager | admin permissions
-    response.ok(yield this.User.all())
+    const user = yield request.auth.getUser()
+    if (user && user.isManager()) {
+      response.ok(yield this.User.all())
+      return
+    }
+    response.unauthorized('You must login as a manager to view users')
   }
 
   * store(request, response) {
@@ -59,7 +63,6 @@ class UserController {
     }
   }
 
-  // TODO split this up into two methods
   * profile(request, response) {
     const user = yield request.auth.getUser()
     if (user) {
@@ -72,18 +75,16 @@ class UserController {
   * times(request, response) {
     const user = yield request.auth.getUser()
     if (user) {
-      var timeEntries = yield user.timeEntries().orderBy('date', 'desc').fetch()
+      var { startDate, endDate } = request.only('startDate', 'endDate'),
+        query = user.timeEntries().orderBy('date', 'desc')
 
-      response.ok({ timeEntries })
+      if (startDate) query = query.where('date', '>=', startDate)
+      if (endDate) query = query.where('date', '<=', endDate)
+
+      response.ok({ timeEntries: yield query.fetch() })
       return
     }
     response.unauthorized('You must login to view your times')
-  }
-
-  average(array) {
-    var sum = 0
-    for(var i = 0; i < array.length; i++) sum+=array[i]
-    return sum/array.length
   }
 
   * report(request, response) {
@@ -95,7 +96,6 @@ class UserController {
         return moment(startOfWeek).format('MM/DD/YYYY')
       })
 
-      // console.log(report)
       var report = []
       for (var week in entriesByWeek) {
         if (entriesByWeek.hasOwnProperty(week)) {
@@ -106,6 +106,7 @@ class UserController {
           })
         }
       }
+      report = report.slice(0, 5)
 
       response.ok({ report })
       return
@@ -113,24 +114,49 @@ class UserController {
     response.unauthorized('You must login to view your report')
   }
 
-  * show(request, response) {
-    // Todo require auth & manager | admin permissions
-    yield response.json({ message: 'Not implemented yet! (show)' })
-  }
-
-  * edit(request, response) {
-    // Todo require auth & manager | admin permissions
-    yield response.json({ message: 'Not implemented yet! (edit)' })
+  average(array) {
+    var sum = 0
+    for(var i = 0; i < array.length; i++) sum+=array[i]
+    return sum/array.length
   }
 
   * update(request, response) {
-    // Todo require auth & manager | admin permissions
-    yield response.json({ message: 'Not implemented yet! (update)' })
+    const user = yield request.auth.getUser()
+    if (!user) {
+      response.unauthorized('You must login as a manager to update users')
+      return
+    }
+
+    var id = request.param('id'),
+      updates = request.only('username', 'email', 'role', 'password'),
+      userToUpdate = yield this.User.find(id)
+
+    if (userToUpdate && user.isManager()) {      
+      const validation = yield this.Validator.validate(updates, this.User.update_rules, this.User.messages)
+
+      if (validation.fails()) {
+        response.badRequest({ errors: validation.messages() })
+        return
+      }
+
+      userToUpdate.fill(updates)
+      response.ok(yield userToUpdate.save())
+      return
+    } else response.unauthorized('Cannot update this user')
   }
 
   * destroy(request, response) {
-    // Todo require auth & manager | admin permissions
-    yield response.json({ message: 'Not implemented yet! (destroy)' })
+    const user = yield request.auth.getUser()
+    if (user && user.isManager()) {
+      var id = request.param('id'),
+        userToDelete = yield this.User.find(id)
+
+      if (userToDelete) response.ok(yield userToDelete.delete())
+      else response.unauthorized('Cannot delete this user')
+
+      return
+    }
+    response.unauthorized('You must login as a manager to delete users')
   }
 
 }

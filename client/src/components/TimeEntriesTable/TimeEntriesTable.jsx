@@ -3,9 +3,12 @@ import React from 'react'
 import RaisedButton from 'material-ui/RaisedButton'
 import CircularProgress from 'material-ui/CircularProgress'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
+import DatePicker from 'material-ui/DatePicker'
 
 import DeleteTimeDialog from '../DeleteTimeDialog'
 import UpdateTimeDialog from '../UpdateTimeDialog'
+
+import { dateString } from '../../utils/helpers'
 
 export default class TimeEntriesTable extends React.Component {
   static propTypes = {}
@@ -17,24 +20,36 @@ export default class TimeEntriesTable extends React.Component {
       loading: true,
       deleteConfirmOpen: false,
       updateDialogOpen: false,
-      selected: null
+      selected: null,
+      startDate: null,
+      endDate: null
     }
+
+    this.updateFilter = this.updateFilter.bind(this)
   }
 
   componentWillMount() {
     this.props.getTimes()
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    let { entries } = nextProps,
-      { loading } = nextState
+  componentDidUpdate(prevProps, prevState) {
+    let { entries } = this.props,
+      { loading } = this.state
 
     if (entries != null && loading) this.setState({ loading: false })
+    else if (prevState.endDate !== this.state.endDate || prevState.startDate !== this.state.startDate)
+      this.updateFilter()
+  }
+
+  updateFilter() {
+    let { startDate, endDate } = this.state
+    
+    this.props.getTimes(startDate ? dateString(startDate) : undefined, endDate ? dateString(endDate) : undefined)
   }
 
   render() {
     let { classes, sheet, entries } = this.props,
-      { selected, loading, deleteConfirmOpen, updateDialogOpen } = this.state,
+      { selected, loading, deleteConfirmOpen, updateDialogOpen, startDate, endDate } = this.state,
       isSelected = selected !== null,
       selectedEntry = entries && entries.length && isSelected ? entries[selected] : null,
       self = this
@@ -48,15 +63,37 @@ export default class TimeEntriesTable extends React.Component {
           <h3>Time Records</h3>
         </div>
         <div className={classes.controls}>
-          <RaisedButton disabled={!isSelected}
-            label="Update"
-            onTouchTap={() => self.setState({ updateDialogOpen: true })}
-          />
-          <RaisedButton disabled={!isSelected}
-            secondary={true}
-            label="Delete"
-            onTouchTap={() => self.setState({ deleteConfirmOpen: true })}
-          />
+          <span className={classes.filterControls}>
+            <DatePicker
+              textFieldStyle={{ width: '100%' }}
+              onChange={(none, newDate) => self.setState({startDate: newDate})}
+              value={startDate}
+              maxDate={endDate ? endDate : undefined}
+              hintText="Start Filter"
+            />
+            <DatePicker
+              textFieldStyle={{ width: '100%' }}
+              onChange={(none, newDate) => self.setState({endDate: newDate})}
+              value={endDate}
+              minDate={startDate ? startDate : undefined}
+              hintText="End Filter"
+            />
+          </span>
+          <span className={classes.recordControls}>
+            <RaisedButton disabled={!(endDate || startDate)}
+              label="Reset Filter"
+              onTouchTap={() => self.setState({ startDate: null, endDate: null })}
+            />
+            <RaisedButton disabled={!isSelected}
+              label="Update"
+              onTouchTap={() => self.setState({ updateDialogOpen: true })}
+            />
+            <RaisedButton disabled={!isSelected}
+              secondary={true}
+              label="Delete"
+              onTouchTap={() => self.setState({ deleteConfirmOpen: true })}
+            />
+          </span>
         </div>
         <Table onCellClick={(row, col) => 
           self.setState({ selected: selected === row ? null : row })}

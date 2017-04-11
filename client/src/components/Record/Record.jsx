@@ -6,6 +6,8 @@ import RaisedButton from 'material-ui/RaisedButton'
 import CircularProgress from 'material-ui/CircularProgress'
 import TextField from 'material-ui/TextField'
 
+import { formatDigits, dateString } from '../../utils/helpers'
+
 export default class Record extends React.Component {
     static propTypes = {
         confirmTrack: React.PropTypes.func.isRequired
@@ -30,9 +32,7 @@ export default class Record extends React.Component {
 
         this.toggleTimer = this.toggleTimer.bind(this)
         this.increment = this.increment.bind(this)
-        this.formatDigits = this.formatDigits.bind(this)
         this.timeString = this.timeString.bind(this)
-        this.dateString = this.dateString.bind(this)
         this.isValid = this.isValid.bind(this)
     }
 
@@ -40,26 +40,10 @@ export default class Record extends React.Component {
         clearInterval(this.state.timerId)
     }
 
-    formatDigits(value, digits) {
-      var str = value + ''
-
-      if (str.length < digits) return `${Array(digits - str.length + 1).join('0')}${str}`
-      else if (str.length > digits) return str.substring(0, digits)
-      else return str
-    }
-
     timeString() {
       let { milliseconds, seconds, minutes, hours } = this.state
 
-      return `${this.formatDigits(hours, 2)}:${this.formatDigits(minutes, 2)}:${this.formatDigits(seconds, 2)}:${this.formatDigits(milliseconds, 3)}`
-    }
-
-    dateString() {
-      let { date } = this.state
-
-      if (date === null) return ''
-
-      return `${date.getFullYear()}-${this.formatDigits(date.getMonth()+1, 2)}-${this.formatDigits(date.getDate(), 2)}`
+      return `${formatDigits(hours, 2)}:${formatDigits(minutes, 2)}:${formatDigits(seconds, 2)}:${formatDigits(milliseconds, 3)}`
     }
 
     isValid() {
@@ -177,7 +161,7 @@ export default class Record extends React.Component {
           /><br />
 
           <RaisedButton primary={true} disabled={!this.isValid()} label="Save"
-            onTouchTap={() => confirmTrack(this.timeString(), distance.value, this.dateString())}
+            onTouchTap={() => confirmTrack(this.timeString(), distance.value, dateString(date))}
           />
         </div>
     }

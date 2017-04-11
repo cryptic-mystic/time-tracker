@@ -12,10 +12,6 @@ class TimeEntry extends Lucid {
     return ['date_display', 'pace']
   }
 
-  // static get visible () {
-  //   return ['id', 'date', 'time', 'distance', 'user_id', 'date_display', 'avg_speed', 'created_at', 'updated_at']
-  // }
-
   getPace() {
     var timeArray = this.time.split(':'),
       milliseconds = parseInt(timeArray[3]), seconds = parseInt(timeArray[2]),
