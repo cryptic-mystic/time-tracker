@@ -25,16 +25,41 @@ export default class Record extends React.Component {
             value: '',
             error: undefined
           },
+          date: new Date()
         }
 
         this.toggleTimer = this.toggleTimer.bind(this)
         this.increment = this.increment.bind(this)
-        this.twoDigits = this.twoDigits.bind(this)
+        this.formatDigits = this.formatDigits.bind(this)
+        this.timeString = this.timeString.bind(this)
+        this.dateString = this.dateString.bind(this)
         this.isValid = this.isValid.bind(this)
     }
 
     componentWillUnmount() {
         clearInterval(this.state.timerId)
+    }
+
+    formatDigits(value, digits) {
+      var str = value + ''
+
+      if (str.length < digits) return `${Array(digits - str.length + 1).join('0')}${str}`
+      else if (str.length > digits) return str.substring(0, digits)
+      else return str
+    }
+
+    timeString() {
+      let { milliseconds, seconds, minutes, hours } = this.state
+
+      return `${this.formatDigits(hours, 2)}:${this.formatDigits(minutes, 2)}:${this.formatDigits(seconds, 2)}:${this.formatDigits(milliseconds, 3)}`
+    }
+
+    dateString() {
+      let { date } = this.state
+
+      if (date === null) return ''
+
+      return `${date.getFullYear()}-${this.formatDigits(date.getMonth()+1, 2)}-${this.formatDigits(date.getDate(), 2)}`
     }
 
     isValid() {
@@ -95,11 +120,11 @@ export default class Record extends React.Component {
 
     render() {
         let { classes, sheet, confirmTrack } = this.props,
-          { active, seconds, minutes, hours, milliseconds, distance } = this.state,
+          { active, seconds, minutes, hours, milliseconds, distance, date } = this.state,
           self = this
 
         return <div className={classes.record}>
-          <h1>Timer</h1>
+          <h2>Timer</h2>
           <div className={classes.timer}>
             <CircularProgress mode="determinate"
               className={classes.seconds}
@@ -134,7 +159,7 @@ export default class Record extends React.Component {
                 : <FontIcon className="icon-pause2" style={{ transition: 'none', position: 'relative', left: '1px' }} />
               }
             </FloatingActionButton>
-            <h2 className={classes.display}>{this.twoDigits(hours)}:{this.twoDigits(minutes)}:{this.twoDigits(seconds)}:{this.twoDigits(milliseconds)}</h2>
+            <h2 className={classes.display}>{this.timeString()}</h2>
           </div>
 
           <TextField
@@ -152,7 +177,7 @@ export default class Record extends React.Component {
           /><br />
 
           <RaisedButton primary={true} disabled={!this.isValid()} label="Save"
-            onTouchTap={() => confirmTrack(hours, minutes, seconds, milliseconds, distance.value, new Date())}
+            onTouchTap={() => confirmTrack(this.timeString(), distance.value, this.dateString())}
           />
         </div>
     }

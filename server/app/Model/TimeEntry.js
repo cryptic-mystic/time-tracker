@@ -9,7 +9,21 @@ class TimeEntry extends Lucid {
   }
 
   static get computed () {
-    return ['date_display']
+    return ['date_display', 'avg_speed']
+  }
+
+  // static get visible () {
+  //   return ['id', 'date', 'time', 'distance', 'user_id', 'date_display', 'avg_speed', 'created_at', 'updated_at']
+  // }
+
+  getAvgSpeed() {
+    var timeArray = this.time.split(':'),
+      milliseconds = parseInt(timeArray[3]), seconds = parseInt(timeArray[2]),
+      minutes = parseInt(timeArray[1]), hours = parseInt(timeArray[0]),
+      decimalTime = (hours * 60) + minutes + (seconds/60) + (milliseconds/60/1000),
+      pace = (decimalTime / this.distance) || 0
+
+    return pace !== Infinity ? pace : 0
   }
 
   getDateDisplay() {

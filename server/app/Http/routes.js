@@ -21,6 +21,8 @@ Route.on('/').render('welcome')
 
 Route.group('version1', function () {
   Route.get('users/profile', 'UserController.profile')
+  Route.get('users/times', 'UserController.times')
+  Route.get('users/report', 'UserController.report')
   Route.post('users/login', 'UserController.login')
   Route.resource('users', 'UserController')
 

@@ -18,8 +18,22 @@ export function profile(token) {
     })
 }
 
+export function times(token) {
+    return a.get('/times', {
+      headers: {'Authorization': `Bearer ${token}`}
+    })
+}
+
+export function report(token) {
+    return a.get('/report', {
+      headers: {'Authorization': `Bearer ${token}`}
+    })
+}
+
 export default {
     signIn,
     signUp,
-    profile
+    profile,
+    times,
+    report
 }

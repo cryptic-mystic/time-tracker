@@ -15,7 +15,7 @@ export default class Manual extends React.Component {
         let { classes, sheet, confirmTrack } = this.props
 
         return <div className={classes.manual}>
-          <h1>Manual Time Entry</h1>
+          <h2>Manual Time Entry</h2>
           <TimeForm onSave={confirmTrack} />
         </div>
     }

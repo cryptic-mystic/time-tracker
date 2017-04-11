@@ -3,13 +3,13 @@ import injectSheet from 'react-jss'
 
 import Profile from './Profile'
 
-import { logout, getProfile } from '../../store/user/actions'
+import { logout } from '../../store/user/actions'
 
 const styles = {
   profile: {
     padding: '10px',
     textAlign: 'center',
-    '& h2': {
+    '& h1, & h2, & h3, & h4, & h5, & h6': {
       textAlign: 'center',
       margin: '20px 0'
     }
@@ -19,12 +19,6 @@ const styles = {
   },
   profileCard: {
     textAlign: 'initial'
-  },
-  controls: {
-    textAlign: 'right',
-    '& > div': {
-      margin: '0 5px'
-    }
   }
 }
 
@@ -32,7 +26,7 @@ export default injectSheet(styles)(
   connect((state) => {
       return {
         profile: state.user.get('profile') ? state.user.get('profile').toJS() : null,
-        entries: state.user.get('timeEntries') ? state.user.get('timeEntries').toJS() : null
+        report: state.user.get('report') ? state.user.get('report').toJS() : null
       }
-  }, { logout, getProfile })(Profile)
+  }, { logout })(Profile)
 )

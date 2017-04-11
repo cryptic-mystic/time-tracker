@@ -1,5 +1,9 @@
 'use strict'
 
+const Antl = use('Antl')
+const _ = use('lodash')
+const moment = use('moment')
+
 const Auth_Errors = {
   UserNotFoundException: { field: 'email', message: 'Could not find a user with that email' },
   PasswordMisMatchException: { field: 'password', message: 'Incorrect password' }
@@ -55,16 +59,45 @@ class UserController {
     }
   }
 
+  // TODO split this up into two methods
   * profile(request, response) {
     const user = yield request.auth.getUser()
     if (user) {
-      var profile = yield this.User.find(user.id),
-        timeEntries = yield profile.timeEntries().orderBy('date', 'desc').fetch()
-
-      response.ok({ profile, timeEntries })
+      response.ok({ profile: user })
       return
     }
     response.unauthorized('You must login to view your profile')
+  }
+
+  * times(request, response) {
+    const user = yield request.auth.getUser()
+    if (user) {
+      var timeEntries = yield user.timeEntries().orderBy('date', 'desc').fetch()
+
+      response.ok({ timeEntries })
+      return
+    }
+    response.unauthorized('You must login to view your times')
+  }
+
+  * report(request, response) {
+    const user = yield request.auth.getUser()
+    if (user) {
+      var timeEntries = yield user.timeEntries().orderBy('date', 'desc').fetch()
+      var report = _.groupBy(timeEntries.toJSON(), (entry) => {
+        var startOfWeek = moment(entry.date, 'DD/MM/YYYY').startOf('isoWeek')
+        return Antl.formatDate(new Date(startOfWeek), {
+          weekday: 'short',
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        })
+      })
+
+      response.ok({ report })
+      return
+    }
+    response.unauthorized('You must login to view your report')
   }
 
   * show(request, response) {

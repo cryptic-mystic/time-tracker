@@ -147,6 +147,40 @@ export function getProfile() {
     }
 }
 
+export function getTimes() {
+    return function (dispatch, getState) {
+        let { user } = getState(),
+            token = user.get('token')
+
+        return userService.times(token)
+            .then(function (success) {
+                dispatch(userUpdated(success.data))
+                return success.data
+            })
+            .catch(function (failure) {
+                debugger
+                throw failure
+            })
+    }
+}
+
+export function getReport() {
+    return function (dispatch, getState) {
+        let { user } = getState(),
+            token = user.get('token')
+
+        return userService.report(token)
+            .then(function (success) {
+                dispatch(userUpdated(success.data))
+                return success.data
+            })
+            .catch(function (failure) {
+                debugger
+                throw failure
+            })
+    }
+}
+
 export default {
     actionTypes,
     signUp,
@@ -155,5 +189,7 @@ export default {
     createTime,
     deleteTime,
     updateTime,
-    getProfile
+    getProfile,
+    getTimes,
+    getReport
 }

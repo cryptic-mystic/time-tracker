@@ -5,7 +5,8 @@ export var initialState = Immutable.Map({
     authenticated: false,
     token: null,
     profile: null,
-    timeEntries: null
+    timeEntries: null,
+    report: null
 })
 
 export function user(state, action) {

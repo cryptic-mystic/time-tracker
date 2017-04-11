@@ -30,8 +30,8 @@ export default class TimeForm extends React.Component {
       date: hasTime ? new Date(record.date) : null
     }
 
-    this.formatDigits = this.formatDigits.bind(this)
     this.isValid = this.isValid.bind(this)
+    this.formatDigits = this.formatDigits.bind(this)
     this.timeString = this.timeString.bind(this)
     this.dateString = this.dateString.bind(this)
   }
