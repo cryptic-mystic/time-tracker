@@ -6,15 +6,15 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FontIcon from 'material-ui/FontIcon'
 
 import TimeEntriesTable from '../TimeEntriesTable'
+import WeeklyReport from '../WeeklyReport'
 
 export default class Profile extends React.Component {
     constructor(props) {
-        super(props)
+      super(props)
 
-        this.state = {}
+      this.state = {}
 
-        this.logout = this.logout.bind(this)
-        this.renderProfile = this.renderProfile.bind(this)
+      this.logout = this.logout.bind(this)
     }
 
     logout() {
@@ -22,7 +22,7 @@ export default class Profile extends React.Component {
       this.props.router.push('/')
     }
 
-    renderProfile() {
+    render() {
       let { classes, sheet, profile, entries } = this.props,
         usernameDisplay = profile ? profile.username : 'N/A',
         emailDisplay = profile ? profile.email : 'N/A',
@@ -36,30 +36,25 @@ export default class Profile extends React.Component {
         iconClass = 'icon-users'
       }
 
-      return <Card className={classes.profileCard}>
-        <CardHeader
-          title={usernameDisplay}
-          subtitle={emailDisplay}
-          avatar={<FontIcon className={iconClass} />}
-          className={classes.profileCardHeader} 
-        />
-        <CardText>
-          <TimeEntriesTable />
-        </CardText>
-      </Card>
-    }
+      return <Paper className={classes.profile} zDepth={2}>
+        <h2>Profile</h2>
 
-    render() {
-        let { classes, sheet, profile, entries } = this.props
+        <div className={classes.content}>
+          <Card className={classes.profileCard}>
+            <CardHeader
+              title={usernameDisplay}
+              subtitle={emailDisplay}
+              avatar={<FontIcon className={iconClass} />}
+              className={classes.profileCardHeader} 
+            />
+            <CardText>
+              <WeeklyReport />
+              <TimeEntriesTable />
+            </CardText>
+          </Card>
+        </div>
 
-        return <Paper className={classes.profile} zDepth={2}>
-          <h2>Profile</h2>
-
-          <div className={classes.content}>
-            {this.renderProfile()}
-          </div>
-
-          <RaisedButton primary={true} label="Logout" onTouchTap={this.logout}/>
-        </Paper>
+        <RaisedButton primary={true} label="Logout" onTouchTap={this.logout}/>
+      </Paper>
     }
 }

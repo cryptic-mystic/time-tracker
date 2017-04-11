@@ -24,9 +24,8 @@ const styles = {
 
 export default injectSheet(styles)(
   connect((state) => {
-      return {
-        profile: state.user.get('profile') ? state.user.get('profile').toJS() : null,
-        report: state.user.get('report') ? state.user.get('report').toJS() : null
-      }
+    return {
+      profile: state.user.get('profile') ? state.user.get('profile').toJS() : null
+    }
   }, { logout })(Profile)
 )

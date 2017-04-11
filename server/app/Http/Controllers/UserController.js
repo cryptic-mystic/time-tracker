@@ -80,19 +80,32 @@ class UserController {
     response.unauthorized('You must login to view your times')
   }
 
+  average(array) {
+    var sum = 0
+    for(var i = 0; i < array.length; i++) sum+=array[i]
+    return sum/array.length
+  }
+
   * report(request, response) {
     const user = yield request.auth.getUser()
     if (user) {
       var timeEntries = yield user.timeEntries().orderBy('date', 'desc').fetch()
-      var report = _.groupBy(timeEntries.toJSON(), (entry) => {
+      var entriesByWeek = _.groupBy(timeEntries.toJSON(), (entry) => {
         var startOfWeek = moment(entry.date, 'DD/MM/YYYY').startOf('isoWeek')
-        return Antl.formatDate(new Date(startOfWeek), {
-          weekday: 'short',
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit'
-        })
+        return moment(startOfWeek).format('MM/DD/YYYY')
       })
+
+      // console.log(report)
+      var report = []
+      for (var week in entriesByWeek) {
+        if (entriesByWeek.hasOwnProperty(week)) {
+          report.push({
+            week: week,
+            avg_pace: this.average(entriesByWeek[week].map((record) => record.pace)),
+            avg_distance: this.average(entriesByWeek[week].map((record) => parseInt(record.distance)))
+          })
+        }
+      }
 
       response.ok({ report })
       return

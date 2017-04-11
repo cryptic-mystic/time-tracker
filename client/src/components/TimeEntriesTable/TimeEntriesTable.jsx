@@ -75,7 +75,7 @@ export default class TimeEntriesTable extends React.Component {
                 <TableRowColumn>{entry.date_display}</TableRowColumn>
                 <TableRowColumn>{entry.distance} miles</TableRowColumn>
                 <TableRowColumn>{entry.time}</TableRowColumn>
-                <TableRowColumn>{Math.round(entry.avg_speed*100)/100} min/mi</TableRowColumn>
+                <TableRowColumn>{Math.round(entry.pace*100)/100} min/mi</TableRowColumn>
               </TableRow>
             )}
           </TableBody>
