@@ -6,7 +6,8 @@ export const actionTypes = {
     AUTHENTICATED: 'AUTHENTICATED',
     LOGOUT: 'LOGOUT',
     USER_UPDATED: 'USER_UPDATED',
-    TIME_DELETED: 'TIME_DELETED'
+    TIME_DELETED: 'TIME_DELETED',
+    TIME_UPDATED: 'TIME_UPDATED'
 }
 
 // actions
@@ -34,6 +35,13 @@ export function timeRemoved(id) {
     return {
         type: actionTypes.TIME_DELETED,
         id
+    }
+}
+
+export function timeUpdated(id, date, time, distance) {
+    return {
+        type: actionTypes.TIME_UPDATED,
+        id, date, time, distance
     }
 }
 
@@ -103,6 +111,23 @@ export function deleteTime(id) {
     }
 }
 
+export function updateTime(id, date, time, distance) {
+    return function (dispatch, getState) {
+        let { user } = getState(),
+            token = user.get('token')
+
+        return timeEntryService.update(id, date, time, distance, token)
+            .then(function (success) {
+                dispatch(timeUpdated(id, date, time, distance))
+                return success.data
+            })
+            .catch(function (failure) {
+                debugger
+                throw failure
+            })
+    }
+}
+
 export function getProfile() {
     return function (dispatch, getState) {
         let { user } = getState(),
@@ -127,5 +152,6 @@ export default {
     logout,
     createTime,
     deleteTime,
+    updateTime,
     getProfile
 }

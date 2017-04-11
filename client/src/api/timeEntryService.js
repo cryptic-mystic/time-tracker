@@ -16,10 +16,10 @@ export function remove(id, token) {
     })
 }
 
-export function update(id, token) {
-    // return a.delete(`/${id}`, {
-    //   headers: {'Authorization': `Bearer ${token}`}
-    // })
+export function update(id, date, time, distance, token) {
+    return a.put(`/${id}`, { date, time, distance }, {
+      headers: {'Authorization': `Bearer ${token}`}
+    })
 }
 
 export default {

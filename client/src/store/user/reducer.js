@@ -25,9 +25,16 @@ export function user(state, action) {
             var timeEntries = state.get('timeEntries'),
                 indexToRemove = timeEntries.findIndex((entry) => entry.get('id') === action.id)
 
-            return state.set('timeEntries',
-                state.get('timeEntries').remove(indexToRemove)
-            )
+            return state.set('timeEntries', timeEntries.remove(indexToRemove))
+        case actionTypes.TIME_UPDATED:
+            var timeEntries = state.get('timeEntries'),
+                indexToUpdate = timeEntries.findIndex((entry) => entry.get('id') === action.id)
+
+            return state.set('timeEntries', timeEntries.update(indexToUpdate, (value) => value.merge({
+                time: action.time,
+                date: action.date,
+                distance: action.distance
+            })))
     }
 
     return state

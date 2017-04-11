@@ -3,6 +3,8 @@ import React from 'react'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 
+import TimeForm from '../TimeForm'
+
 export default class UpdateTimeDialog extends React.Component {
   static propTypes = {
     open: React.PropTypes.bool.isRequired,
@@ -16,16 +18,21 @@ export default class UpdateTimeDialog extends React.Component {
     this.update = this.update.bind(this)
   }
 
-  update() {
-    let { updateTime } = this.props,
-      { selected } = this.state
+  update(time, distance, date) {
+    let { updateTime, snackbarMessage, onRequestClose, recordToUpdate } = this.props
 
-    console.log(`Selected: ${selected}`)
-    // pop up update modal
+    updateTime(recordToUpdate.id, date, time, distance)
+      .then(function (success) {
+        onRequestClose()
+        snackbarMessage('Time updated')
+      })
+      .catch(function (failure) {
+        snackbarMessage('ERROR: Couldn\'t update time, please try again')
+      })
   }
 
   render() {
-    let { open, onRequestClose, recordToUpdate } = this.props
+    let { classes, sheet, open, onRequestClose, recordToUpdate } = this.props
 
     return <Dialog
       title="Update Record"
@@ -33,20 +40,14 @@ export default class UpdateTimeDialog extends React.Component {
         <FlatButton
           label="Cancel"
           onTouchTap={onRequestClose}
-        />,
-        <FlatButton
-          label="Update"
-          secondary={true}
-          onTouchTap={this.update}
         />
       ]}
       open={open}
       onRequestClose={onRequestClose}
+      className={classes.updateDialog}
     >
       {recordToUpdate 
-        ? <div>
-          <div>Update this entry</div>
-        </div>
+        ? <TimeForm onSave={this.update} record={recordToUpdate} />
         : 'Please select a record to update'
       }
     </Dialog>

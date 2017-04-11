@@ -21,26 +21,14 @@ export default class Track extends React.Component {
         }
 
         this.confirmTrack = this.confirmTrack.bind(this)
-        this.zeroPad = this.zeroPad.bind(this)
         this.handleClose = this.handleClose.bind(this)
     }
 
-    confirmTrack(hours, minutes, seconds, milliseconds, distance, date) {
-      var month = this.zeroPad(date.getMonth()+1),
-        day = this.zeroPad(date.getDate())
-
+    confirmTrack(time, distance, date) {
       this.setState({
-        values: {
-          time: `${hours}:${minutes}:${seconds}:${milliseconds}`,
-          distance,
-          date: `${date.getFullYear()}-${month}-${day}`
-        },
+        values: { time, distance, date },
         confirmOpen: true
       })
-    }
-
-    zeroPad(value) {
-      return (value + '').length === 1 ? `0${value}` : value
     }
 
     handleClose(wasSubmitted) {
