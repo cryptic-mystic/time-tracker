@@ -4,8 +4,8 @@ var a = axios.create({
     baseURL: `${process.env.API_URL}/api/v1/time`
 })
 
-export function create(date, time, distance, token) {
-    return a.post('/', { date, time, distance }, {
+export function create(date, time, distance, user_id, token) {
+    return a.post('/', { date, time, distance, user_id }, {
       headers: {'Authorization': `Bearer ${token}`}
     })
 }

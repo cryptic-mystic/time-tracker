@@ -19,8 +19,16 @@ class TimeController {
       return
     }
 
-    var body = request.only('date', 'time', 'distance')
-    body.user_id = user.id
+    var body = request.only('date', 'time', 'distance', 'user_id')
+    if (body.user_id && !user.isAdmin()) {
+      response.unauthorized('You must be an administrator to create times for other users')
+      return
+    } else if (typeof body.user_id === 'undefined' || body.user_id === null) {
+      console.log('creating time for this user')
+      body.user_id = user.id
+    } else {
+      console.log('creating time for other user....')
+    }
 
     const validation = yield this.Validator.validate(body, this.TimeEntry.rules, this.TimeEntry.messages)
 

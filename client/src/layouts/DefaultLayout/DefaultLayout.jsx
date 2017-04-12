@@ -38,21 +38,16 @@ export default class DefaultLayout extends React.Component {
         this.updateTab()
     }
 
+    // Todo implement a better lookup pattern for the current tab
     updateTab() {
         let { location } = this.props
 
-        switch (location.pathname) {
-            case '/profile':
-                if (this.state.navIndex !== 1) this.setState({ navIndex: 1 })
-                break
-            case '/users':
-                if (this.state.navIndex !== 2) this.setState({ navIndex: 2 })
-                break
-            case '/track':
-            default:
-                if (this.state.navIndex !== 0) this.setState({ navIndex: 0 })
-                break
-        }
+        if (location.pathname === '/profile')
+            if (this.state.navIndex !== 1) this.setState({ navIndex: 1 })
+        if (location.pathname === '/users' || location.pathname.startsWith('/view'))
+            if (this.state.navIndex !== 2) this.setState({ navIndex: 2 })
+        if (location.pathname === '/track')
+            if (this.state.navIndex !== 0) this.setState({ navIndex: 0 })
     }
 
     willEnter(entering) {

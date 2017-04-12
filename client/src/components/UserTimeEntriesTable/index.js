@@ -1,7 +1,6 @@
 import UserTimeEntriesTable from './UserTimeEntriesTable'
 
 import injectSheet from 'react-jss'
-import { connect } from 'react-redux'
 
 const styles = {
   controls: {
@@ -23,7 +22,21 @@ const styles = {
     },
     '@media (max-width: 545px)': {
       display: 'block',
-      position: 'relative'
+      position: 'relative',
+      margin: '5px 0'
+    }
+  },
+  createControls: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    '& > div': {
+      margin: '0 5px'
+    },
+    '@media (max-width: 545px)': {
+      display: 'block',
+      position: 'relative',
+      margin: '5px 0'
     }
   },
   loading: {

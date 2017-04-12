@@ -7,6 +7,7 @@ import DatePicker from 'material-ui/DatePicker'
 
 import DeleteTimeDialog from '../DeleteTimeDialog'
 import UpdateTimeDialog from '../UpdateTimeDialog'
+import CreateTimeDialog from '../CreateTimeDialog'
 
 import { dateString } from '../../utils/helpers'
 
@@ -20,6 +21,7 @@ export default class UserTimeEntriesTable extends React.Component {
       loading: true,
       deleteConfirmOpen: false,
       updateDialogOpen: false,
+      createDialogOpen: false,
       selected: null,
       startDate: null,
       endDate: null
@@ -45,7 +47,7 @@ export default class UserTimeEntriesTable extends React.Component {
 
   render() {
     let { classes, sheet, entries, viewProfile, updater } = this.props,
-      { selected, loading, deleteConfirmOpen, updateDialogOpen, startDate, endDate } = this.state,
+      { selected, loading, deleteConfirmOpen, updateDialogOpen, createDialogOpen, startDate, endDate } = this.state,
       isSelected = selected !== null,
       selectedEntry = entries && entries.length && isSelected ? entries[selected] : null,
       self = this
@@ -90,6 +92,13 @@ export default class UserTimeEntriesTable extends React.Component {
               onTouchTap={() => self.setState({ deleteConfirmOpen: true })}
             />
           </span>
+          <span className={classes.createControls}>
+            <RaisedButton
+              primary={true}
+              label="Create"
+              onTouchTap={() => self.setState({ createDialogOpen: true })}
+            />
+          </span>
         </div>
         <Table onCellClick={(row, col) => 
           self.setState({ selected: selected === row ? null : row })}
@@ -125,6 +134,12 @@ export default class UserTimeEntriesTable extends React.Component {
           open={updateDialogOpen}
           onRequestClose={() => self.setState({ updateDialogOpen: false })}
           onUpdate={this.updateFilter}
+        />
+
+        <CreateTimeDialog
+          open={createDialogOpen}
+          onRequestClose={() => self.setState({ createDialogOpen: false })}
+          onCreate={this.updateFilter}
         />
       </div>
       :

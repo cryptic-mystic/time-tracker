@@ -80,12 +80,12 @@ export function signIn(email, password) {
     }
 }
 
-export function createTime(date, time, distance) {
+export function createTime(date, time, distance, user_id) {
     return function (dispatch, getState) {
         let { user } = getState(),
             token = user.get('token')
 
-        return timeEntryService.create(date, time, distance, token)
+        return timeEntryService.create(date, time, distance, user_id, token)
             .then(function (success) {
                 return success.data
             })
