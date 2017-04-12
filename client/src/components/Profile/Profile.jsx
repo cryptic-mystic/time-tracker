@@ -23,7 +23,7 @@ export default class Profile extends React.Component {
     }
 
     render() {
-      let { classes, sheet, profile, entries } = this.props,
+      let { classes, sheet, profile } = this.props,
         usernameDisplay = profile ? profile.username : 'N/A',
         emailDisplay = profile ? profile.email : 'N/A',
         iconClass = 'icon-user'

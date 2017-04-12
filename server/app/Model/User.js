@@ -8,7 +8,7 @@ class User extends Lucid {
   }
 
   isManager() {
-    return this.role === 'manager'
+    return this.role === 'manager' || this.isAdmin()
   }
 
   timeEntries() {

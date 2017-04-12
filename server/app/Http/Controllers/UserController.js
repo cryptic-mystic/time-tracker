@@ -75,43 +75,52 @@ class UserController {
   * times(request, response) {
     const user = yield request.auth.getUser()
     if (user) {
-      var { startDate, endDate } = request.only('startDate', 'endDate'),
-        query = user.timeEntries().orderBy('date', 'desc')
+      var { startDate, endDate } = request.only('startDate', 'endDate')
 
-      if (startDate) query = query.where('date', '>=', startDate)
-      if (endDate) query = query.where('date', '<=', endDate)
-
-      response.ok({ timeEntries: yield query.fetch() })
+      response.ok({ timeEntries: yield this.getTimes(user, startDate, endDate) })
       return
     }
     response.unauthorized('You must login to view your times')
   }
 
+  * getTimes(user, startDate, endDate) {
+    var query = user.timeEntries().orderBy('date', 'desc')
+
+    if (startDate) query = query.where('date', '>=', startDate)
+    if (endDate) query = query.where('date', '<=', endDate)
+
+    return yield query.fetch()
+  }
+
   * report(request, response) {
     const user = yield request.auth.getUser()
     if (user) {
-      var timeEntries = yield user.timeEntries().orderBy('date', 'desc').fetch()
-      var entriesByWeek = _.groupBy(timeEntries.toJSON(), (entry) => {
-        var startOfWeek = moment(entry.date, 'DD/MM/YYYY').startOf('isoWeek')
-        return moment(startOfWeek).format('MM/DD/YYYY')
-      })
-
-      var report = []
-      for (var week in entriesByWeek) {
-        if (entriesByWeek.hasOwnProperty(week)) {
-          report.push({
-            week: week,
-            avg_pace: this.average(entriesByWeek[week].map((record) => record.pace)),
-            avg_distance: this.average(entriesByWeek[week].map((record) => parseInt(record.distance)))
-          })
-        }
-      }
-      report = report.slice(0, 5)
-
-      response.ok({ report })
+      response.ok({ report: yield this.generateReport(user) })
       return
     }
     response.unauthorized('You must login to view your report')
+  }
+
+  * generateReport(user) {
+    var timeEntries = yield user.timeEntries().orderBy('date', 'desc').fetch()
+    var entriesByWeek = _.groupBy(timeEntries.toJSON(), (entry) => {
+      var startOfWeek = moment(entry.date, 'DD/MM/YYYY').startOf('isoWeek')
+      return moment(startOfWeek).format('MM/DD/YYYY')
+    })
+
+    var report = []
+    for (var week in entriesByWeek) {
+      if (entriesByWeek.hasOwnProperty(week)) {
+        report.push({
+          week: week,
+          avg_pace: this.average(entriesByWeek[week].map((record) => record.pace)),
+          avg_distance: this.average(entriesByWeek[week].map((record) => parseInt(record.distance)))
+        })
+      }
+    }
+    report = report.slice(0, 5)
+
+    return report
   }
 
   average(array) {
@@ -157,6 +166,25 @@ class UserController {
       return
     }
     response.unauthorized('You must login as a manager to delete users')
+  }
+
+  * show(request, response) {
+    const user = yield request.auth.getUser()
+    if (user && user.isAdmin()) {
+      var id = request.param('id'),
+        { startDate, endDate } = request.only('startDate', 'endDate'),
+        userToShow = yield this.User.find(id)
+
+      if (userToShow) response.ok({
+        profile: userToShow,
+        report: yield this.generateReport(userToShow),
+        timeEntries: yield this.getTimes(userToShow, startDate, endDate)
+      })
+      else response.unauthorized('Cannot show this user')
+
+      return
+    }
+    response.unauthorized('You must login as an admin to view user profiles')
   }
 
 }

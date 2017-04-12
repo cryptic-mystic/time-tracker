@@ -32,16 +32,6 @@ class TimeController {
     response.ok(yield this.TimeEntry.create(body))
   }
 
-  * show(request, response) {
-    // require login
-    // require time entry to belong to user, or admin permissions
-  }
-
-  * edit(request, response) {
-    // require login
-    // require time entry to belong to user, or admin permissions
-  }
-
   * update(request, response) {
     const user = yield request.auth.getUser()
     if (!user) {
@@ -53,7 +43,7 @@ class TimeController {
       updates = request.only('date', 'time', 'distance'),
       timeEntry = yield this.TimeEntry.find(id)
 
-    if (timeEntry && timeEntry.user_id === user.id) {
+    if (timeEntry && (timeEntry.user_id === user.id || user.isAdmin())) {
       timeEntry.fill(updates)
       const validation = yield this.Validator.validate(timeEntry, this.TimeEntry.rules, this.TimeEntry.messages)
 
@@ -77,7 +67,7 @@ class TimeController {
     var id = request.param('id'),
       timeEntry = yield this.TimeEntry.find(id)
 
-    if (timeEntry && timeEntry.user_id === user.id)
+    if (timeEntry && (timeEntry.user_id === user.id || user.isAdmin()))
       response.ok(yield timeEntry.delete())
     else response.unauthorized('Cannot delete this resource')
   }

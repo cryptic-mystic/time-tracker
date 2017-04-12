@@ -12,9 +12,11 @@ export function users(state, action) {
         case actionTypes.USER_DELETED:
             var indexToRemove = state.findIndex((user) => user.get('id') === action.id)
             return state.remove(indexToRemove)
-        case actionTypes.TIME_UPDATED:
+        case actionTypes.USER_CHANGED:
             var indexToUpdate = state.findIndex((user) => user.get('id') === action.id)
             return state.update(indexToUpdate, (value) => value.merge(action.values))
+        default:
+            return state
     }
 
     return state

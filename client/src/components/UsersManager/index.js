@@ -2,6 +2,7 @@ import UsersManager from './UsersManager'
 
 import { connect } from 'react-redux'
 import injectSheet from 'react-jss'
+import { withRouter } from 'react-router'
 
 import { getUsers } from '../../store/users/actions'
 
@@ -25,10 +26,12 @@ const styles = {
   }
 }
 
-export default injectSheet(styles)(
+export default withRouter(injectSheet(styles)(
   connect((state) => {
     return {
-      users: state.users ? state.users.toJS() : null
+      users: state.users ? state.users.toJS() : null,
+      currentRole: state.user.getIn(['profile', 'role']),
+      currentId: state.user.getIn(['profile', 'id'])
     }
   }, { getUsers })(UsersManager)
-)
+))

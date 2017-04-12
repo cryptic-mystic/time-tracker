@@ -42,12 +42,16 @@ export default class UpdateUserDialog extends React.Component {
     let { user } = nextProps,
       { username, email, role } = this.state
 
-    if (user.username !== username.value || user.email !== email.value || user.role !== role.value)
-      this.setState({
-        username: { value: user.username },
-        email: { value: user.email },
-        role: { value: user.role }
-      })
+    // Nothing has changed
+    if (this.props.user !== null && user !== null && this.props.user.id === user.id) return
+    else if (this.props.user === null && user === null) return
+    
+    // User has been erased or changed
+    this.setState({
+      username: { value: user ? user.username : '' },
+      email: { value: user ? user.email : '' },
+      role: { value: user ? user.role : '' }
+    })
   }
 
   isValid() {
@@ -60,16 +64,30 @@ export default class UpdateUserDialog extends React.Component {
   }
 
   update() {
-    let { updateUser, snackbarMessage, onRequestClose, user } = this.props
+    let { updateUser, snackbarMessage, onRequestClose, user } = this.props,
+      { username, email, role } = this.state,
+      updates = {},
+      self = this
 
-    // updateUser(user.id, values)
-    //   .then(function (success) {
-    //     onRequestClose()
-    //     snackbarMessage('User updated')
-    //   })
-    //   .catch(function (failure) {
-    //     snackbarMessage('ERROR: Couldn\'t update user, please try again')
-    //   })
+    if (user.username !== username.value) updates.username = username.value
+    if (user.email !== email.value) updates.email = email.value
+    if (user.role !== role.value) updates.role = role.value
+
+    updateUser(user.id, updates).then(function (success) {
+        onRequestClose()
+        snackbarMessage('User updated')
+      })
+      .catch(function (error) {
+        if (error.field) {
+          self.setState({
+            [`${error.field}`]: {
+                value: self.state[`${error.field}`].value,
+                error: error.message
+            }
+          })
+        }
+        snackbarMessage('ERROR: Couldn\'t update user, please try again')
+      })
   }
 
   render() {

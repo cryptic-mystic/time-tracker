@@ -1,9 +1,7 @@
-import TimeEntriesTable from './TimeEntriesTable'
+import UserTimeEntriesTable from './UserTimeEntriesTable'
 
-import { connect } from 'react-redux'
 import injectSheet from 'react-jss'
-
-import { getTimes, getReport } from '../../store/user/actions'
+import { connect } from 'react-redux'
 
 const styles = {
   controls: {
@@ -33,10 +31,4 @@ const styles = {
   }
 }
 
-export default injectSheet(styles)(
-  connect((state) => {
-    return {
-      entries: state.user.get('timeEntries') ? state.user.get('timeEntries').toJS() : null
-    }
-  }, { getTimes, getReport })(TimeEntriesTable)
-)
+export default injectSheet(styles)(UserTimeEntriesTable)

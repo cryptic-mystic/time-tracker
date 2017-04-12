@@ -49,6 +49,13 @@ export function update(id, values, token) {
     })
 }
 
+export function view(id, startDate, endDate, token) {
+    return a.get(`/${id}`, {
+      headers: {'Authorization': `Bearer ${token}`},
+      params: { startDate, endDate }
+    })
+}
+
 export default {
     signIn,
     signUp,
@@ -57,5 +64,6 @@ export default {
     report,
     users,
     remove,
-    update
+    update,
+    view
 }

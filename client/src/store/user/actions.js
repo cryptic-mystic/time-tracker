@@ -103,8 +103,7 @@ export function deleteTime(id) {
 
         return timeEntryService.remove(id, token)
             .then(function (success) {
-                dispatch(timeRemoved(success.data))
-                return success.data
+                return id
             })
             .catch(function (failure) {
                 debugger
@@ -120,8 +119,7 @@ export function updateTime(id, date, time, distance) {
 
         return timeEntryService.update(id, date, time, distance, token)
             .then(function (success) {
-                dispatch(timeUpdated(id, date, time, distance))
-                return success.data
+                return { id, date, time, distance }
             })
             .catch(function (failure) {
                 debugger

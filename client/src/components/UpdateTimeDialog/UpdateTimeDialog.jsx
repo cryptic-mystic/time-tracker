@@ -9,7 +9,8 @@ export default class UpdateTimeDialog extends React.Component {
   static propTypes = {
     open: React.PropTypes.bool.isRequired,
     onRequestClose: React.PropTypes.func.isRequired,
-    recordToUpdate: React.PropTypes.object
+    recordToUpdate: React.PropTypes.object,
+    onUpdate: React.PropTypes.func
   }
 
   constructor(props) {
@@ -19,12 +20,13 @@ export default class UpdateTimeDialog extends React.Component {
   }
 
   update(time, distance, date) {
-    let { updateTime, snackbarMessage, onRequestClose, recordToUpdate } = this.props
+    let { updateTime, snackbarMessage, onRequestClose, recordToUpdate, onUpdate } = this.props
 
     updateTime(recordToUpdate.id, date, time, distance)
       .then(function (success) {
         onRequestClose()
         snackbarMessage('Time updated')
+        if (onUpdate) onUpdate()
       })
       .catch(function (failure) {
         snackbarMessage('ERROR: Couldn\'t update time, please try again')

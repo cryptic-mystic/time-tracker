@@ -1,9 +1,9 @@
-import Profile from './Profile'
+import ViewUserProfile from './ViewUserProfile'
 
-import { connect } from 'react-redux'
 import injectSheet from 'react-jss'
+import { connect } from 'react-redux'
 
-import { logout } from '../../store/user/actions'
+import { viewProfile } from '../../store/profile/actions'
 
 const styles = {
   profile: {
@@ -24,8 +24,6 @@ const styles = {
 
 export default injectSheet(styles)(
   connect((state) => {
-    return {
-      profile: state.user.get('profile') ? state.user.get('profile').toJS() : null
-    }
-  }, { logout })(Profile)
+    return state.profile !== null ? state.profile.toJS() : {}
+  }, { viewProfile })(ViewUserProfile)
 )

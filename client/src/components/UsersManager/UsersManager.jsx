@@ -36,7 +36,7 @@ export default class UsersManager extends React.Component {
   }
 
   render() {
-    let { classes, sheet, users } = this.props,
+    let { classes, sheet, users, currentRole, currentId, router } = this.props,
       { loading, selected, deleteConfirmOpen, updateDialogOpen } = this.state,
       isSelected = selected !== null,
       selectedUser = users && users.length && isSelected ? users[selected] : null,
@@ -51,6 +51,13 @@ export default class UsersManager extends React.Component {
         :
         <div>
           <div className={classes.controls}>
+            {currentRole === 'admin'
+              ? <RaisedButton
+                disabled={!(selectedUser && selectedUser.id !== currentId)}
+                label="View Profile"
+                onTouchTap={() => router.push(`/view/${selectedUser.id}`)}
+              /> : null
+            }
             <RaisedButton disabled={!isSelected}
               label="Update"
               onTouchTap={() => self.setState({ updateDialogOpen: true })}
@@ -60,7 +67,6 @@ export default class UsersManager extends React.Component {
               label="Delete"
               onTouchTap={() => self.setState({ deleteConfirmOpen: true })}
             />
-            {/*TODO View Profile*/}
           </div>
           <Table onCellClick={(row, col) => self.setState({ selected: selected === row ? null : row })}>
             <TableHeader>

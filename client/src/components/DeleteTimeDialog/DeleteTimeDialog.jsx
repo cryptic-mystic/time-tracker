@@ -7,7 +7,8 @@ export default class DeleteTimeDialog extends React.Component {
   static propTypes = {
     open: React.PropTypes.bool.isRequired,
     onRequestClose: React.PropTypes.func.isRequired,
-    recordToDelete: React.PropTypes.object
+    recordToDelete: React.PropTypes.object,
+    onDelete: React.PropTypes.func,
   }
 
   constructor(props) {
@@ -17,13 +18,14 @@ export default class DeleteTimeDialog extends React.Component {
   }
 
   delete() {
-    let { deleteTime, snackbarMessage, recordToDelete, onRequestClose } = this.props,
+    let { deleteTime, snackbarMessage, recordToDelete, onRequestClose, onDelete } = this.props,
       self = this
 
     deleteTime(recordToDelete.id)
       .then(function(success) {
         onRequestClose()
         snackbarMessage('Record deleted')
+        if (onDelete) onDelete()
       })
       .catch(function(failure) {
         snackbarMessage('ERROR DELETING RECORD, please try again')

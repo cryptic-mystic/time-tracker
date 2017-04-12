@@ -5,7 +5,7 @@ import timeEntryService from '../../api/timeEntryService'
 export const actionTypes = {
     USERS_UPDATED: 'USERS_UPDATED',
     USER_DELETED: 'USER_DELETED',
-    USER_UPDATED: 'USER_UPDATED'
+    USER_CHANGED: 'USER_CHANGED'
 }
 
 // actions
@@ -25,7 +25,7 @@ export function userDeleted(id) {
 
 export function userUpdated(id, values) {
     return {
-        type: actionTypes.USER_UPDATED,
+        type: actionTypes.USER_CHANGED,
         id, values
     }
 }

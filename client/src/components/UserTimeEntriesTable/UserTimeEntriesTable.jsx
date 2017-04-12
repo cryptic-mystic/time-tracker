@@ -10,7 +10,7 @@ import UpdateTimeDialog from '../UpdateTimeDialog'
 
 import { dateString } from '../../utils/helpers'
 
-export default class TimeEntriesTable extends React.Component {
+export default class UserTimeEntriesTable extends React.Component {
   static propTypes = {}
 
   constructor(props) {
@@ -26,11 +26,6 @@ export default class TimeEntriesTable extends React.Component {
     }
 
     this.updateFilter = this.updateFilter.bind(this)
-    this.updateAll = this.updateAll.bind(this)
-  }
-
-  componentWillMount() {
-    this.props.getTimes()
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -45,16 +40,11 @@ export default class TimeEntriesTable extends React.Component {
   updateFilter() {
     let { startDate, endDate } = this.state
     
-    this.props.getTimes(startDate ? dateString(startDate) : undefined, endDate ? dateString(endDate) : undefined)
-  }
-
-  updateAll() {
-    this.updateFilter()
-    this.props.getReport()
+    this.props.updater(startDate ? dateString(startDate) : undefined, endDate ? dateString(endDate) : undefined)
   }
 
   render() {
-    let { classes, sheet, entries } = this.props,
+    let { classes, sheet, entries, viewProfile, updater } = this.props,
       { selected, loading, deleteConfirmOpen, updateDialogOpen, startDate, endDate } = this.state,
       isSelected = selected !== null,
       selectedEntry = entries && entries.length && isSelected ? entries[selected] : null,
@@ -127,14 +117,14 @@ export default class TimeEntriesTable extends React.Component {
           recordToDelete={selectedEntry}
           open={deleteConfirmOpen}
           onRequestClose={() => self.setState({ deleteConfirmOpen: false })}
-          onDelete={this.updateAll}
+          onDelete={this.updateFilter}
         />
 
         <UpdateTimeDialog
           recordToUpdate={selectedEntry}
           open={updateDialogOpen}
           onRequestClose={() => self.setState({ updateDialogOpen: false })}
-          onUpdate={this.updateAll}
+          onUpdate={this.updateFilter}
         />
       </div>
       :
